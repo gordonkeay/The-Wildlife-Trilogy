@@ -1,0 +1,881 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Theory of Glide — Undine Léman</title>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=Cinzel:wght@400;500&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink:       #1a1410;
+    --deep:      #0d2433;
+    --ocean:     #1a3d5c;
+    --lake:      #2e7fa8;
+    --mist:      #7bb8cc;
+    --foam:      #d8eef5;
+    --parchment: #f4edd8;
+    --aged:      #ede4cc;
+    --cream:     #faf6ee;
+    --smoke:     #e8e0d0;
+    --gold:      #c8a84a;
+    --verdigris: #4a8a6a;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--cream);
+    color: var(--ink);
+    font-family: 'EB Garamond', Georgia, serif;
+    font-size: 20px;
+    line-height: 1.9;
+    overflow-x: hidden;
+  }
+
+  /* ---- COVER ---- */
+  .cover {
+    min-height: 100vh;
+    background: var(--deep);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 80px 10vw;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .cover::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 80% 50% at 50% 100%, rgba(46,127,168,0.3) 0%, transparent 60%),
+      radial-gradient(ellipse 40% 60% at 10% 30%, rgba(74,138,106,0.1) 0%, transparent 50%);
+    pointer-events: none;
+  }
+
+  /* Water ripple lines */
+  .cover::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      180deg,
+      transparent 0px,
+      transparent 58px,
+      rgba(123,184,204,0.03) 58px,
+      rgba(123,184,204,0.03) 60px
+    );
+    pointer-events: none;
+  }
+
+  .cover-inner { position: relative; z-index: 1; }
+
+  .cover-ornament {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--mist);
+    opacity: 0.5;
+    margin-bottom: 40px;
+  }
+
+  .cover-title {
+    font-family: 'Cinzel', serif;
+    font-size: clamp(2.2rem, 7vw, 5.5rem);
+    font-weight: 400;
+    color: var(--parchment);
+    letter-spacing: 0.12em;
+    line-height: 1.15;
+    margin-bottom: 8px;
+  }
+
+  .cover-title-sub {
+    font-family: 'EB Garamond', serif;
+    font-size: clamp(1.1rem, 3vw, 1.8rem);
+    font-style: italic;
+    color: var(--mist);
+    letter-spacing: 0.05em;
+    margin-bottom: 40px;
+  }
+
+  .cover-rule {
+    width: 60px;
+    height: 1px;
+    background: var(--gold);
+    opacity: 0.4;
+    margin: 0 auto 40px;
+  }
+
+  .cover-author {
+    font-family: 'Cinzel', serif;
+    font-size: 1.1rem;
+    color: rgba(216,238,245,0.55);
+    letter-spacing: 0.2em;
+    margin-bottom: 16px;
+  }
+
+  .cover-location {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: rgba(200,168,74,0.35);
+  }
+
+  /* ---- PAGE ---- */
+  .page {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 80px 8vw;
+  }
+
+  /* ---- CHAPTER HEADERS ---- */
+  .chapter-header {
+    text-align: center;
+    padding: 80px 0 48px;
+    border-bottom: 1px solid rgba(13,36,51,0.1);
+    margin-bottom: 56px;
+  }
+
+  .chapter-number {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--lake);
+    margin-bottom: 20px;
+    display: block;
+  }
+
+  .chapter-title {
+    font-family: 'Cinzel', serif;
+    font-size: clamp(1.6rem, 3vw, 2.4rem);
+    font-weight: 400;
+    color: var(--deep);
+    letter-spacing: 0.06em;
+    line-height: 1.3;
+    margin-bottom: 16px;
+  }
+
+  .chapter-subtitle {
+    font-family: 'EB Garamond', serif;
+    font-size: 1rem;
+    font-style: italic;
+    color: rgba(13,36,51,0.4);
+  }
+
+  /* ---- BODY TEXT ---- */
+  .text p {
+    margin-bottom: 24px;
+    color: var(--ink);
+    font-size: 1.05rem;
+    line-height: 1.95;
+  }
+
+  .text p:first-child::first-letter {
+    font-family: 'Cinzel', serif;
+    font-size: 4rem;
+    font-weight: 400;
+    float: left;
+    line-height: 0.75;
+    margin: 8px 12px 0 0;
+    color: var(--ocean);
+  }
+
+  /* ---- TEACHING BOX ---- */
+  .teaching {
+    margin: 44px 0;
+    padding: 32px 36px;
+    background: var(--foam);
+    border-left: 3px solid var(--lake);
+    position: relative;
+  }
+
+  .teaching-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 8px;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--lake);
+    margin-bottom: 16px;
+    display: block;
+  }
+
+  .teaching p {
+    font-size: 1rem;
+    color: var(--deep);
+    line-height: 1.85;
+    margin-bottom: 14px;
+  }
+
+  .teaching p:last-child { margin-bottom: 0; }
+
+  /* ---- PERSONAL STORY ---- */
+  .story {
+    margin: 44px 0;
+    padding: 28px 36px;
+    background: var(--aged);
+    border-left: 3px solid var(--gold);
+    font-style: italic;
+  }
+
+  .story-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 8px;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--gold);
+    opacity: 0.7;
+    margin-bottom: 16px;
+    display: block;
+    font-style: normal;
+  }
+
+  .story p {
+    font-size: 1rem;
+    color: #2a1e10;
+    line-height: 1.85;
+    margin-bottom: 14px;
+  }
+
+  .story p:last-child { margin-bottom: 0; }
+
+  .sequence-step {
+    display: flex;
+    gap: 24px;
+    margin-bottom: 32px;
+    align-items: flex-start;
+  }
+
+  .step-number {
+    font-family: 'Cinzel', serif;
+    font-size: 2rem;
+    font-weight: 400;
+    color: var(--gold);
+    opacity: 0.6;
+    line-height: 1;
+    min-width: 32px;
+    padding-top: 4px;
+  }
+
+  .step-content { flex: 1; }
+
+  .step-title {
+    font-family: 'Cinzel', serif;
+    font-size: 1rem;
+    font-weight: 400;
+    color: var(--ocean);
+    letter-spacing: 0.06em;
+    margin-bottom: 10px;
+  }
+
+  /* ---- KEY LINE ---- */
+  .key-line {
+    margin: 40px 0;
+    text-align: center;
+    font-family: 'EB Garamond', serif;
+    font-size: 1.4rem;
+    font-style: italic;
+    color: var(--ocean);
+    line-height: 1.6;
+    padding: 0 20px;
+  }
+
+  /* ---- OBSERVATION ---- */
+  .observation {
+    margin: 40px 0;
+    padding: 28px 32px;
+    border: 1px solid rgba(46,127,168,0.2);
+    background: rgba(46,127,168,0.03);
+    position: relative;
+  }
+
+  .observation-label {
+    position: absolute;
+    top: -10px;
+    left: 24px;
+    background: var(--cream);
+    padding: 0 8px;
+    font-family: 'DM Mono', monospace;
+    font-size: 8px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--lake);
+  }
+
+  .observation p {
+    font-size: 0.95rem;
+    color: var(--deep);
+    font-style: italic;
+    line-height: 1.8;
+    margin: 0;
+  }
+
+  /* ---- SECTION BREAK ---- */
+  .section-break {
+    text-align: center;
+    margin: 48px 0;
+    color: var(--gold);
+    opacity: 0.4;
+    letter-spacing: 0.5em;
+    font-size: 0.8rem;
+  }
+
+  /* ---- CHAPTER DIVIDER ---- */
+  .chapter-divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(13,36,51,0.15), transparent);
+    margin: 80px 0;
+  }
+
+  /* ---- FOOTER ---- */
+  footer {
+    background: var(--deep);
+    padding: 48px 10vw;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+
+  footer .footer-title {
+    font-family: 'Cinzel', serif;
+    font-size: 0.95rem;
+    color: rgba(216,238,245,0.35);
+    letter-spacing: 0.15em;
+  }
+
+  footer .footer-meta {
+    font-family: 'DM Mono', monospace;
+    font-size: 8px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(216,238,245,0.2);
+    text-align: right;
+    line-height: 2;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+</style>
+</head>
+<body>
+
+<!-- COVER -->
+<section class="cover">
+  <div class="cover-inner">
+    <div class="cover-ornament">Found in a boathouse · Lac Léman · Date unknown</div>
+    <h1 class="cover-title">The Theory<br>of Glide</h1>
+    <p class="cover-title-sub">A guide to the art and practice of pump foiling</p>
+    <div class="cover-rule"></div>
+    <div class="cover-author">Undine Léman</div>
+    <div class="cover-location">Lac Léman · Switzerland</div>
+  </div>
+</section>
+
+<!-- FOREWORD -->
+<div class="page">
+
+  <div class="chapter-header">
+    <span class="chapter-number">Foreword</span>
+    <h2 class="chapter-title">On cherche la glisse</h2>
+    <span class="chapter-subtitle">We search for the glide</span>
+  </div>
+
+  <div class="text">
+
+    <p>
+      I did not intend to write this book.
+    </p>
+
+    <p>
+      I intended to keep a diary — the way you keep a diary when you are learning something difficult and you need somewhere to put the failures so they don't accumulate inside you. The dairy became notes. The notes became observations. The observations became, over the course of more sessions on the water than I can accurately count, something that wanted to be shared.
+    </p>
+
+    <p>
+      So here it is. Not a manual. Not a training programme. Not a set of instructions guaranteed to produce results by a certain date. Those books exist — I have read most of them, and they are useful as far as they go, which is usually as far as the technique and no further.
+    </p>
+
+    <p>
+      This book goes further. Or tries to. Because pump foiling, as anyone who has spent real time on the water will tell you, is not primarily a technical problem. It is a philosophical one. The technique is the surface. Underneath the technique is a question about how to be in a body, how to be in the world, how to stop fighting the things that are trying to carry you and simply — go along for the ride.
+    </p>
+
+    <p>
+      I have been on this lake for a long time. I have fallen more times than I can count, in conditions ranging from glassy calm to the kind of chop that makes you question your life choices. I have spent hours watching other riders — beginners and masters, children and elders — and I have noticed the same thing every time: the people who progress fastest are not the fittest, or the most technically gifted, or the most determined. They are the ones who are most willing to listen. To the water. To the foil. To the body's own intelligence, which always knows more than the thinking mind is prepared to admit.
+    </p>
+
+    <p>
+      This book is for those people. It is also for the ones who are not yet those people but would like to be.
+    </p>
+
+  </div>
+
+  <div class="section-break">· · ·</div>
+
+  <div class="text">
+
+    <p>
+      A word about the title.
+    </p>
+
+    <p>
+      The theory of glide does not yet exist as a formal body of knowledge. There are no textbooks. There are no peer-reviewed papers. There is a growing community of practitioners, a handful of extraordinary athletes, and a great deal of footage on the internet that is more inspiring than instructive. The practice is so new that most of what we know about it has been learned by individuals, alone or in small groups, on specific bodies of water, in specific conditions, through the specific logic of their own bodies encountering a specific problem for the first time.
+    </p>
+
+    <p>
+      In other words: we are all writing this theory together. Every session adds to it. Every fall contributes something. Every breakthrough, however small, is a page in a book that is still being written and will not be finished in our lifetimes.
+    </p>
+
+    <p>
+      What I have done here is offer one chapter. My chapter. Written from this lake, with these hands, through this particular body's encounter with this practice over this particular stretch of years. You will disagree with some of it. You will find things I have missed entirely. You will discover, on your own water, things that this book could not have anticipated.
+    </p>
+
+    <p>
+      Good. Write them down. Add them to the theory. That is how knowledge grows — not from a single authority but from the accumulated honesty of everyone who has gone to the water and tried.
+    </p>
+
+  </div>
+
+  <div class="key-line">
+    "On cherche la glisse."<br>
+    We search for the glide.<br>
+    <span style="font-size: 0.85em; opacity: 0.6;">This is not a destination. It is a practice.</span>
+  </div>
+
+  <div class="text">
+    <p>
+      Use this book the way you would use a conversation with someone who has been on the water longer than you. Take what is useful. Leave what isn't. Come back to the parts that confused you after you have had another fifty sessions — they will mean something different then. Write in the margins. Argue with me. The book can take it.
+    </p>
+
+    <p>
+      And when you find your own glide — your own theory, your own mantra, your own answer to the question the water is always asking — write it down and share it. Someone further back on the path than you needs to hear it.
+    </p>
+
+    <p style="text-align: right; font-style: italic; margin-top: 40px; opacity: 0.6;">
+      — U.L.<br>
+      <span style="font-family: 'DM Mono', monospace; font-size: 0.7rem; letter-spacing: 0.15em;">Lac Léman · Dawn · Early spring</span>
+    </p>
+  </div>
+
+</div>
+
+<div class="chapter-divider"></div>
+
+<!-- CHAPTER ONE -->
+<div class="page">
+
+  <div class="chapter-header">
+    <span class="chapter-number">Chapter One</span>
+    <h2 class="chapter-title">The Manta Ray<br>Out of Water</h2>
+    <span class="chapter-subtitle">Before anything else — the equipment</span>
+  </div>
+
+  <div class="text">
+
+    <p>
+      The first thing you need to understand about a pump foil is that it makes no sense on land.
+    </p>
+
+    <p>
+      Pick it up. Feel the weight of it — the board under one arm, the foil assembly in the other hand, the mast digging into your palm, the wing protruding at an angle that guarantees it will catch on every doorframe between the car park and the water. The whole apparatus is ungainly, awkward, vaguely threatening. It looks like something industrial that has been repurposed for a use its designers did not intend. You will feel, carrying it for the first time, that you have made a significant error of judgement.
+    </p>
+
+    <p>
+      This feeling is correct. And it does not matter in the slightest.
+    </p>
+
+    <p>
+      Because the moment that wing touches the water, everything changes. The foil that was cumbersome and confusing on land becomes something else entirely — alive, responsive, already in conversation with the medium it was designed for. Like a manta ray out of the water, lying on a dock, all awkward weight and trailing wings. Put it back in the ocean and watch what happens.
+    </p>
+
+    <p>
+      You are not yet the manta ray. But you will be. And the first step is learning to carry the thing without injuring yourself or anyone nearby.
+    </p>
+
+  </div>
+
+  <div class="section-break">· · ·</div>
+
+  <div class="text">
+
+    <p>
+      I remember the morning my equipment arrived. A large cardboard box, labelled with the particular seriousness of something precious inside. I spent a long time simply looking at the components before I touched them — the board with its chosen colours, the wing with its span that seemed too large for any practical purpose, the mast eighty centimetres of solid carbon connecting a world above the water to a world below it, the stabiliser so small it seemed a joke. I put it together and dismantled it. Then I put it together again. I read nothing. I watched everything. This is, I think, the correct order.
+    </p>
+
+    <p>
+      You will find your own ritual. But I suggest you give the assembly and disassembly more time than you think it deserves, before you ever get near the water. The equipment rewards familiarity. Every screw, every connection point, every foil surface has a logic — and the logic, once understood in the hands rather than merely the mind, becomes automatic. The morning you arrive at the dock and assemble the foil in ten minutes without thinking about it is a morning when your entire mental capacity is available for the water. That morning is worth many patient evenings in the car park.
+    </p>
+
+  </div>
+
+  <div class="teaching">
+    <span class="teaching-label">The Assembly — What to Know</span>
+    <p>Grease the connection points before every session. Teflon grease on the mast base, the fuselage connection, the wing interface. It takes thirty seconds and saves twenty minutes of frustration on the dock when you are trying to dismantle a foil that has been locked by salt water and carbon dust and the particular stubbornness of things that have been under pressure.</p>
+    <p>Tighten the bolts in a cross pattern. Not to the point of stress — to the point of certainty. You will develop a feel for this. Until you have that feel, err on the side of checking rather than assuming.</p>
+    <p>Check the front wing bolts after your first few sessions. They loosen with use. A loose front wing changes the feel of everything and will have you doubting your technique when the problem is simply hardware. One rider I know spent three weeks convinced she had lost her balance before she discovered her wing had been flying loose for a fortnight.</p>
+    <p>The order of disassembly: front wing first, then stabiliser, then fuselage from mast, then mast from board. This sequence protects the most vulnerable components and gives you the best leverage at each stage.</p>
+  </div>
+
+  <div class="section-break">· · ·</div>
+
+  <div class="text">
+
+    <p>
+      Now — how to carry it.
+    </p>
+
+    <p>
+      There is no elegant solution. There is only a least-bad solution, which you will refine over time into something that works for your body and your route to the water. The wing will always protrude. The mast will always find the one surface it can scratch against. Accept this and move on.
+    </p>
+
+    <p>
+      What matters is protecting the leading edge of the front wing. This is the most vulnerable surface and the most consequential — a chip or ding on the leading edge changes the hydrodynamic behaviour of the foil in ways that are subtle but real. Carry the wing facing inward, close to your body. Move slowly through doorways and crowds. Give it the same care you would give something genuinely precious, because it is.
+    </p>
+
+    <p>
+      Your back will tell you things during this phase that are worth listening to. The lifting, the carrying, the getting in and out of the water — these are not the glamorous parts of the practice, but they are the parts that, done badly, will shorten your season. Bend your knees. Distribute the weight. Do not twist under load. The same body that needs to be available for two hours on the water needs to survive the walk to get there.
+    </p>
+
+  </div>
+
+  <div class="story">
+    <span class="story-label">From the diary</span>
+    <p>On my second day out I had a wetsuit that was meant for open water swimming — the knees not built for board sports. I had no grip on my soles. I had not yet learned that the dock would become slippery after an hour of attempts, that the board would develop an enthusiasm for launching itself into positions of maximum inconvenience, that the wing I was carrying like something merely heavy would one day feel like an extension of my own body.</p>
+    <p>None of that was visible yet. What was visible was a floating dock on an Alpine lake at dusk, a full moon rising over the mountains, and the particular quality of silence that arrives when you have committed to something difficult and the difficulty has not yet begun to resolve itself into competence.</p>
+    <p>It was enough. It was more than enough. The equipment and I were getting acquainted. That is all that was required of that evening.</p>
+  </div>
+
+  <div class="section-break">· · ·</div>
+
+  <div class="text">
+
+    <p>
+      A note on repairs, because you will need them sooner than you expect.
+    </p>
+
+    <p>
+      Foil surfaces get damaged. Wing tips chip against rocks and docks. Leading edges accumulate small dings. The carbon surface, for all its strength, is not immune to the particular violence of a board that has decided to go somewhere you did not intend. This is not failure. It is use. An unrepaired foil is not a tragedy — it is a project. Learn to look at damage with the curiosity of someone who is about to understand the material better, not the despair of someone watching something irreplaceable break.
+    </p>
+
+    <p>
+      Marine epoxy, carbon fibre powder, fine sandpaper. These are your tools. The technique is not complicated but it rewards patience — the same patience the water will ask of you in everything else. Sand the damaged area clean. Apply the repair. Let it cure completely before you return to the water. Do not rush the cure. The repair that fails because it was rushed is worse than the original damage.
+    </p>
+
+    <p>
+      Better still — find someone in your local community who repairs foils. These people exist. They are usually the ones who have been on the water the longest and have the most interesting collection of scars on their equipment. They will teach you more in an afternoon of repair work than most tutorials can offer in an hour.
+    </p>
+
+  </div>
+
+  <div class="observation">
+    <span class="observation-label">Undine's Note · On Caring for Equipment</span>
+    <p>The rider who repairs their own foil understands it differently from the rider who sends it away to be fixed. There is something in the act of running your hand along a damaged surface, understanding exactly what happened and why, and then restoring it — something that deepens the relationship between the person and the object. The foil is not a commodity. It is a tool in the old sense: something made with purpose, used with skill, maintained with care, and passed on when the time comes to someone who will do the same. Treat it accordingly and it will teach you things that a perfect, undamaged, never-repaired foil never could.</p>
+  </div>
+
+  <div class="key-line">
+    "Like a manta ray out of the water it makes no sense.<br>
+    But once that wing hits the water — everything changes."
+  </div>
+
+  <div class="text">
+    <p>
+      You will carry this awkward, beautiful, impractical thing to the water many hundreds of times. Each time it will feel slightly more natural. Each time the walk to the dock will be less about managing the equipment and more about arriving — at the water, at the practice, at whatever the lake has to offer that morning.
+    </p>
+
+    <p>
+      The manta ray, out of water, is still a manta ray. It has not forgotten what it is. It is simply waiting for its element.
+    </p>
+
+    <p>
+      So are you.
+    </p>
+  </div>
+
+  <div style="text-align: center; padding: 48px 0 0; font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 0.25em; text-transform: uppercase; color: rgba(13,36,51,0.25);">
+    · · ·
+  </div>
+
+</div>
+
+<div class="chapter-divider"></div>
+
+<!-- CHAPTER FIVE -->
+<div class="page">
+
+  <div class="chapter-header">
+    <span class="chapter-number">Chapter Five</span>
+    <h2 class="chapter-title">On cherche la glisse</h2>
+    <span class="chapter-subtitle">The pump sequence · Weight, wave, and the art of not forcing</span>
+  </div>
+
+  <div class="para-epigraph">
+    "Progress is not linear. Keep showing up and leave no trace — just ripples and swirls eddying into the void."
+    <cite>— From the pump foil diary · Lac Léman</cite>
+  </div>
+
+  <div class="text">
+
+    <p>
+      The pump is not a push. This is the first and most important thing to understand, and it is the thing most beginners get wrong for longer than they need to. They push down. They work against the foil. They tire themselves out in ten seconds and wonder why the riders they watch on video seem to continue indefinitely with no apparent effort.
+    </p>
+
+    <p>
+      What those riders are doing is not pushing. They are shifting. They are moving with the foil's natural frequency — loading it at exactly the right moment, releasing at exactly the right moment, and trusting the physics to do the rest. The pump is a conversation. The foil speaks first. Your job is to listen and respond at the right time.
+    </p>
+
+    <p>
+      The best pump foilers use a smooth fore-and-aft weight shift. Not up and down. Not a squat and jump. A wave of weight moving through the body from front to back and back to front — the same undulation the eel uses, the same oscillation the dolphin uses, the same principle the humpback whale exploits with its tubercled pectoral fins. Nature solved this problem long before we arrived at the dock.
+    </p>
+
+  </div>
+
+  <div class="section-break">· · ·</div>
+
+  <div class="teaching">
+    <span class="teaching-label">The pump sequence · Three movements · One wave</span>
+
+    <p>
+      Break it down into three distinct phases. Practice each one separately before combining them. The body learns in parts before it learns the whole.
+    </p>
+
+    <div class="sequence-step">
+      <span class="step-number">1</span>
+      <div class="step-content">
+        <p class="step-title">Unweight</p>
+        <p>The body rises slightly. The foil climbs. You are not pushing up — you are removing the downward pressure that was holding the foil at its current height. Think of it as releasing rather than lifting. The foil wants to climb. You are simply getting out of its way.</p>
+        <p>This is the moment of maximum glide. The foil is rising and carrying you with it. Do not rush the next phase. Let the climb happen. This pause — brief, half a breath — is where the efficiency lives.</p>
+      </div>
+    </div>
+
+    <div class="sequence-step">
+      <span class="step-number">2</span>
+      <div class="step-content">
+        <p class="step-title">Drive forward</p>
+        <p>The hips move forward. The front foot loads the foil. This is not a stamp — it is a press, smooth and deliberate, transferring weight through the front of the body and into the nose of the board. The foil begins to angle down. Speed builds.</p>
+        <p>The key word is forward, not down. You are not pressing the board into the water. You are driving your weight toward the nose, which redirects the foil's angle of attack and converts lift into forward momentum.</p>
+      </div>
+    </div>
+
+    <div class="sequence-step">
+      <span class="step-number">3</span>
+      <div class="step-content">
+        <p class="step-title">Compress</p>
+        <p>The back foot loads the tail. The foil accelerates forward. The body compresses — not collapses, compresses — coiling the spring, storing the energy that the next unweight phase will release. The foil is now at the bottom of its arc, moving fast, carrying the momentum that the previous two phases built.</p>
+        <p>And then — release. Unweight again. The cycle repeats. The pump becomes a wave travelling through the body, through the board, through the foil, into the water. When it is working, you feel it as rhythm rather than effort. You stop counting the phases and start feeling the frequency.</p>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="section-break">· · ·</div>
+
+  <div class="text">
+
+    <p>
+      The pump becomes a wave of travel. That is the phrase I keep returning to. Not a pump at all in the mechanical sense — more like a sinus curve moving through the system, the same curve the eel traces through water, the same oscillation the dolphin's flukes generate, the same principle that allowed Nicolas Iten to cover seventy-two kilometres on a lake in five hours without stopping.
+    </p>
+
+    <p>
+      When you find it — and you will find it, if you keep returning to the dock — you will know it not through understanding but through feeling. The arms become unnecessary. The rhythm is all in the legs. When high on the mast it becomes a gentle pulse. Not effort. Conversation.
+    </p>
+
+    <p>
+      The common mistake at every level of progression is the same mistake: forcing the transition. Rushing the unweight into the drive, rushing the drive into the compress, not trusting the glide at the top, not trusting the momentum at the bottom. The foil has a natural frequency. When you align your body's rhythm with that frequency, you can maintain flight with thirty percent less physical effort than when you fight it.
+    </p>
+
+    <p>
+      Thirty percent. That is the difference between ten minutes and thirty minutes. Between thirty minutes and three hours. Between three hours and seventy-two kilometres on Lac Léman with the birds in full song and the mountains reflected in the surface and the water closing behind you as if you were never there.
+    </p>
+
+  </div>
+
+  <div class="story">
+    <span class="story-label">From the water · The day the arms stopped</span>
+    <p>There was a session when I was feeling off — below my usual energy, not expecting much. And perhaps that is why it happened. I stopped trying to manage the rhythm and the rhythm found me. I felt a micro change in the timing between my two legs — something circular, something I recognised without being able to name. Suddenly I did not need my arms. The movement was all from the legs. When high on the mast it became a gentle pulse. I stayed out longer than I had ever stayed. When I came in I sat for a long time watching the water close over the line the foil had cut. The ripples and swirls eddying into the quiet.</p>
+    <p>Progress is not linear. Keep showing up. The frequency will find you.</p>
+  </div>
+
+  <div class="section-break">· · ·</div>
+
+  <div class="teaching">
+    <span class="teaching-label">What to practise on land</span>
+    <p>Before you go to the dock, stand on flat ground and rehearse the weight shift. Feel the fore-and-aft transfer — front foot, back foot, front foot — without any board beneath you. The body learns the pattern faster than you think. A balance board or cushion beneath the feet accelerates this dramatically. The muscle memory you build on land translates directly to the water. The dock start takes care of itself when the weight shift is already in the body.</p>
+  </div>
+
+  <div class="chapter-close">
+    <div class="close-ornament">· · ·</div>
+  </div>
+
+</div>
+
+<div class="chapter-divider"></div>
+
+<!-- CHAPTER FIFTEEN -->
+<div class="page">
+
+  <div class="chapter-header">
+    <span class="chapter-number">Chapter Fifteen</span>
+    <h2 class="chapter-title">The Inner Revolution</h2>
+    <span class="chapter-subtitle">What the practice does to the person underneath the technique</span>
+  </div>
+
+  <div class="text">
+
+    <p>
+      I want to say something that most foiling guides will not say. Not because it is secret — it is the opposite of secret, it is the thing that every serious practitioner eventually discovers and then finds impossible to explain to someone who has not yet felt it — but because it sits outside the usual territory of technique and equipment and progression.
+    </p>
+
+    <p>
+      Pump foiling is a tool for the inner revolution.
+    </p>
+
+    <p>
+      I did not know this when I started. I thought I was learning a sport. I was learning something much larger.
+    </p>
+
+  </div>
+
+  <div class="section-break">· · ·</div>
+
+  <div class="text">
+
+    <p>
+      Many of us arrive at the dock carrying armour. This is especially true of men — though not only of men — who have spent years in a culture that rewards hardness, decisiveness, forward momentum, the appearance of effortless control. The armour is not weakness. It was built for good reasons, over many years, in response to real experiences that required a shell. But it is heavy. And it is, on a foil, completely useless.
+    </p>
+
+    <p>
+      The foil does not respond to hardness. It does not reward the person who grips tighter, pushes harder, insists more forcefully on the outcome they have decided to achieve. It responds to exactly the opposite qualities: softness, receptivity, the willingness to feel rather than control. The moment you tighten your jaw and decide to make it happen, the board ejects you. Every time. Without exception.
+    </p>
+
+    <p>
+      This is the first lesson of the inner revolution. Not a technique lesson. A character lesson. The practice is telling you, repeatedly and without apology, that the qualities you have been rewarded for in the rest of your life will not serve you here. Here, something else is required.
+    </p>
+
+    <p>
+      Gentleness. Playfulness. Presence. The willingness to be thrown and get back up without hardening further. The capacity to fail publicly, repeatedly, in front of strangers, without it meaning anything about who you are.
+    </p>
+
+    <p>
+      These are not soft qualities. They are the hardest qualities I know. They require more courage than any amount of pushing and grinding. The person who can stand on a dock after their five hundredth fall and approach the five hundred and first with genuine lightness and curiosity — that person has done serious inner work, whether they know it or not.
+    </p>
+
+  </div>
+
+  <div class="story">
+    <span class="story-label">From the water</span>
+    <p>I remember the session when I first noticed the armour coming off. I had been on the foil for several months. The technique was beginning to settle — not mastered, but familiar enough that I was no longer using all of my cognitive capacity just to stay upright. And in that small gap of freed attention, something that had been locked behind the effort began to surface.</p>
+    <p>I was pumping — not well, not efficiently, but pumping — and I felt something move in my chest that had nothing to do with the foil. A loosening. A quality of aliveness that I had not felt in a very long time. The kind that belongs to children playing, to people absorbed in something they love, to moments when the thinking mind has been given something so specific and so demanding to do that it finally stops its other commentary and simply — is present.</p>
+    <p>I came off the board eventually, as I always did. I swam back to the dock. And I sat there for a while, not rushing to try again, just sitting with whatever had happened. I did not have a name for it then. I have one now. It was the beginning of the inner revolution.</p>
+  </div>
+
+  <div class="section-break">· · ·</div>
+
+  <div class="text">
+
+    <p>
+      The embodiment question is central to all of this. Most of what breaks people — the cortisol accumulation, the emotional disconnection, the sense of living inside a head that is divorced from the body it inhabits — lives in the split between thinking and feeling. The mind that plans and manages and controls, and the body that carries all of this around and is never consulted.
+    </p>
+
+    <p>
+      Pump foiling closes that split by necessity. You cannot think your way onto a foil. The window between dropping the board and needing to be correctly positioned on it is approximately half a second. The conscious mind is too slow. The body must know. And when you finally trust the body to know — when you lift your gaze, open your posture, have faith that the thousand repetitions have carved the knowledge into muscle and nerve and the deep grammar of the nervous system — something shifts that goes far beyond technique.
+    </p>
+
+    <p>
+      You become, for the duration of the session, fully embodied. Not thinking about the body from a distance. Inside it. Feeling it. Trusting it. In conversation with it rather than directing it from above.
+    </p>
+
+    <p>
+      This is not a small thing. For many people it is a revelation. The body has been trying to tell them things for years — about stress, about emotion, about what is needed and what is not — and the thinking mind has been too loud, too busy, too focused on the next problem to listen. The foil quiets the mind by giving it something so specific and so immediate that it has no bandwidth left for its usual commentary. And in that quiet, the body finally gets to speak.
+    </p>
+
+  </div>
+
+  <div class="teaching">
+    <span class="teaching-label">What the practice asks</span>
+    <p>It asks you to concentrate on gentleness. On playfulness. On mindfulness in the most literal sense — the mind filled with this, only this, the board and the water and the body and the pump. It asks you to be so connected to the feeling and so immersed in the natural moment that the rest of your life recedes to the background. Not permanently — you will carry it all back to the shore with you when you come in. But for the duration of the session, you are released from it. You are simply here. Moving. Breathing. Searching for the glide.</p>
+    <p>This is what the Balinese understand when they make their daily offerings. What the meditator understands in the morning sit. What the baker understands in the pre-dawn kitchen with flour on their hands. The dedicated practice — whatever its form — creates a space in which the ordinary self is suspended and something deeper gets to move. The foil is one path to this space. It is not the only path. But it is a remarkable one, because it asks for the whole body, because it happens on water, because it connects you to the physics of a living lake and the intelligence of species that have been moving through that water for millions of years before you arrived.</p>
+  </div>
+
+  <div class="section-break">· · ·</div>
+
+  <div class="text">
+
+    <p>
+      Some people find that the practice begins to surface things they did not expect. Old patterns. Held emotions. The particular quality of grief or fear or longing that has been stored in the body for years, waiting for the conditions that would allow it to move. This is not the foil causing something new. The foil is simply creating the conditions — the presence, the embodiment, the quiet of the thinking mind — in which what was already there can finally be felt.
+    </p>
+
+    <p>
+      If this happens to you, stay with it. Do not rush back to technique. Do not use the next attempt as a way to avoid what has surfaced. The inner revolution is not a problem to be managed. It is the point. The foil has given you access to something that needed to move. Let it move.
+    </p>
+
+    <p>
+      You may find, as I did and as many riders I have known have found, that the practice begins to change you in ways that extend far beyond the water. More present in your relationships. More patient with difficulty. More willing to begin again after failure — on the board and off it. More attuned to the small things: the quality of light on the lake, the temperature of the air, the particular feeling of a morning when everything is still and the water is flat and you are alive and here and this is enough.
+    </p>
+
+    <p>
+      This is what I mean by the inner revolution. Not a dramatic transformation. A slow, faithful, session by session reorientation of the self toward presence, toward gentleness, toward the qualities that the armoured life pushed underground.
+    </p>
+
+  </div>
+
+  <div class="section-break">· · ·</div>
+
+  <div class="text">
+
+    <p>
+      It's an embodied practice. There is the feeling of flow as you gently feel your way closer to mastery with each session. Connecting with body and spirit in gentle movement. Nature supports the journey one pump at a time.
+    </p>
+
+    <p>
+      On cherche le glisse — gliding to moments of bliss.
+    </p>
+
+    <p>
+      I wrote those words to a friend who asked me how the foiling was going. I did not think about them. They arrived, the way the truest things arrive, from somewhere below the usual level of composition. I stand by every word.
+    </p>
+
+    <p>
+      This is what we are searching for. Not just the technical glide — the foil lifting, the board rising, the clear air between hull and surface. The inner glide. The state in which effort becomes invisible, presence becomes total, and the person riding the foil is, for a moment, exactly and completely themselves.
+    </p>
+
+    <p>
+      That state is available to you. It will take time and falls and cold mornings and the particular humility of being a beginner at something difficult. It will ask you to put down the armour. It will teach you things about yourself that you did not go to the dock to learn.
+    </p>
+
+    <p>
+      Go anyway.
+    </p>
+
+    <p>
+      The lake is waiting. The practice is waiting. The inner revolution — yours, specific to you, shaped by everything you carry and everything you are ready to put down — is waiting.
+    </p>
+
+    <p>
+      On cherche la glisse.
+    </p>
+
+  </div>
+
+  <div style="text-align: center; padding: 48px 0 0; font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 0.25em; text-transform: uppercase; color: rgba(13,36,51,0.25);">
+    · · ·
+  </div>
+
+</div>
+
+<footer>
+  <div class="footer-title">THE THEORY OF GLIDE — Undine Léman</div>
+  <div class="footer-meta">
+    Draft · Foreword & Chapter One<br>
+    Archeus Planare Foundation · 2026
+  </div>
+</footer>
+
+</body>
+</html>
