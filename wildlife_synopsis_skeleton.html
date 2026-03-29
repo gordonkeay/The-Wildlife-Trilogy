@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wildlife — Synopsis & Skeleton</title>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=Cinzel:wght@400;500&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #1a1410;
+    --deep: #1a0d08;
+    --forest: #2a3d1c;
+    --earth: #5c3a1e;
+    --moss: #4a6a3a;
+    --gold: #c8a84a;
+    --parchment: #f4edd8;
+    --aged: #ede4cc;
+    --cream: #faf6ee;
+    --muted: #777777;
+    --rust: #8a3a1e;
+    --smoke: #e8e0cc;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--cream);
+    color: var(--ink);
+    font-family: 'EB Garamond', Georgia, serif;
+    font-size: 18px;
+    line-height: 1.85;
+  }
+
+  .cover {
+    min-height: 55vh;
+    background: var(--deep);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 80px 10vw;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .cover::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 70% 50% at 50% 100%, rgba(42,61,28,0.5) 0%, transparent 60%),
+      radial-gradient(ellipse 30% 40% at 20% 20%, rgba(200,168,74,0.04) 0%, transparent 50%);
+    pointer-events: none;
+  }
+
+  .cover-inner { position: relative; z-index: 1; }
+
+  .cover-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--gold);
+    opacity: 0.6;
+    margin-bottom: 24px;
+  }
+
+  .cover-title {
+    font-family: 'Cinzel', serif;
+    font-size: clamp(3rem, 10vw, 6.5rem);
+    font-weight: 400;
+    color: var(--parchment);
+    letter-spacing: 0.12em;
+    line-height: 1;
+    margin-bottom: 16px;
+  }
+
+  .cover-subtitle {
+    font-family: 'EB Garamond', serif;
+    font-size: clamp(1rem, 2.5vw, 1.4rem);
+    font-style: italic;
+    color: rgba(244,237,216,0.45);
+    margin-bottom: 40px;
+  }
+
+  .cover-rule {
+    width: 60px;
+    height: 1px;
+    background: var(--gold);
+    opacity: 0.35;
+    margin: 0 auto 32px;
+  }
+
+  .cover-author {
+    font-family: 'Cinzel', serif;
+    font-size: 1rem;
+    color: rgba(244,237,216,0.35);
+    letter-spacing: 0.2em;
+  }
+
+  .cover-location {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: rgba(200,168,74,0.25);
+    margin-top: 8px;
+  }
+
+  .page {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 60px 8vw;
+  }
+
+  .section {
+    margin-bottom: 64px;
+  }
+
+  .section-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--moss);
+    margin-bottom: 16px;
+    display: block;
+  }
+
+  .section-title {
+    font-family: 'Cinzel', serif;
+    font-size: 1.6rem;
+    font-weight: 400;
+    color: var(--deep);
+    letter-spacing: 0.06em;
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid rgba(42,61,28,0.12);
+  }
+
+  .prose p {
+    margin-bottom: 20px;
+    line-height: 1.95;
+    color: var(--ink);
+  }
+
+  .key-line {
+    background: var(--aged);
+    border-left: 3px solid var(--gold);
+    padding: 20px 28px;
+    margin: 32px 0;
+    font-style: italic;
+    font-size: 1.05rem;
+    color: var(--earth);
+    line-height: 1.75;
+  }
+
+  .status-bar {
+    display: flex;
+    gap: 16px;
+    margin: 32px 0;
+    flex-wrap: wrap;
+  }
+
+  .status-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .status-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .dot-written { background: #4a6a3a; }
+  .dot-forming { background: #c8a84a; }
+  .dot-arriving { background: #8a3a1e; }
+  .dot-future { background: #cccccc; }
+
+  .chapter-block {
+    background: white;
+    border: 1px solid rgba(42,30,16,0.08);
+    border-left: 4px solid var(--moss);
+    padding: 24px 28px;
+    margin-bottom: 20px;
+    position: relative;
+  }
+
+  .chapter-block.forming {
+    border-left-color: var(--gold);
+  }
+
+  .chapter-block.arriving {
+    border-left-color: var(--rust);
+  }
+
+  .chapter-block.future {
+    border-left-color: #cccccc;
+    opacity: 0.7;
+  }
+
+  .chapter-status {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    font-family: 'DM Mono', monospace;
+    font-size: 7px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 2px;
+  }
+
+  .status-written { background: rgba(74,106,58,0.1); color: var(--moss); }
+  .status-forming { background: rgba(200,168,74,0.1); color: #8a6a1e; }
+  .status-arriving { background: rgba(138,58,30,0.1); color: var(--rust); }
+  .status-future { background: rgba(150,150,150,0.1); color: #999; }
+
+  .chapter-number {
+    font-family: 'DM Mono', monospace;
+    font-size: 8px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 8px;
+    display: block;
+  }
+
+  .chapter-title {
+    font-family: 'Cinzel', serif;
+    font-size: 1.1rem;
+    font-weight: 400;
+    color: var(--deep);
+    letter-spacing: 0.04em;
+    margin-bottom: 8px;
+    line-height: 1.3;
+    padding-right: 80px;
+  }
+
+  .chapter-subtitle {
+    font-size: 0.9rem;
+    font-style: italic;
+    color: var(--muted);
+    margin-bottom: 12px;
+  }
+
+  .chapter-body {
+    font-size: 0.92rem;
+    color: #2a2010;
+    line-height: 1.8;
+    margin-bottom: 12px;
+  }
+
+  .chapter-source {
+    font-family: 'DM Mono', monospace;
+    font-size: 7px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    opacity: 0.7;
+  }
+
+  .chapter-quote {
+    font-style: italic;
+    font-size: 0.88rem;
+    color: var(--earth);
+    border-left: 2px solid rgba(92,58,30,0.2);
+    padding-left: 12px;
+    margin-top: 10px;
+    line-height: 1.65;
+  }
+
+  .divider {
+    text-align: center;
+    color: var(--gold);
+    opacity: 0.4;
+    margin: 48px 0;
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.4em;
+  }
+
+  .structure-note {
+    background: var(--aged);
+    padding: 28px 32px;
+    margin: 32px 0;
+    border: 1px solid rgba(92,58,30,0.1);
+  }
+
+  .structure-note p {
+    font-size: 0.95rem;
+    color: var(--earth);
+    line-height: 1.8;
+    margin-bottom: 12px;
+  }
+
+  .structure-note p:last-child { margin-bottom: 0; }
+
+  .structure-note strong {
+    font-family: 'Cinzel', serif;
+    font-weight: 400;
+    letter-spacing: 0.04em;
+  }
+
+  .four-candles {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin: 32px 0;
+  }
+
+  .candle-box {
+    background: white;
+    border: 1px solid rgba(42,30,16,0.08);
+    border-top: 3px solid var(--gold);
+    padding: 16px 14px;
+    text-align: center;
+  }
+
+  .candle-name {
+    font-family: 'Cinzel', serif;
+    font-size: 0.82rem;
+    color: var(--deep);
+    letter-spacing: 0.04em;
+    margin-bottom: 8px;
+    line-height: 1.3;
+  }
+
+  .candle-desc {
+    font-size: 0.78rem;
+    color: var(--muted);
+    font-style: italic;
+    line-height: 1.55;
+  }
+
+  .closing-block {
+    background: var(--deep);
+    padding: 48px;
+    text-align: center;
+    margin: 48px 0;
+  }
+
+  .closing-block p {
+    font-family: 'EB Garamond', serif;
+    font-size: 1.15rem;
+    font-style: italic;
+    color: var(--parchment);
+    line-height: 2.1;
+    letter-spacing: 0.02em;
+  }
+
+  .closing-block cite {
+    display: block;
+    margin-top: 20px;
+    font-family: 'DM Mono', monospace;
+    font-size: 8px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(244,237,216,0.25);
+    font-style: normal;
+  }
+
+  footer {
+    background: var(--deep);
+    padding: 32px 8vw;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 60px;
+  }
+
+  .footer-title {
+    font-family: 'Cinzel', serif;
+    font-size: 0.85rem;
+    color: rgba(244,237,216,0.3);
+    letter-spacing: 0.1em;
+  }
+
+  .footer-meta {
+    font-family: 'DM Mono', monospace;
+    font-size: 8px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(244,237,216,0.15);
+    text-align: right;
+    line-height: 2;
+  }
+
+  @media (max-width: 600px) {
+    .four-candles { grid-template-columns: repeat(2, 1fr); }
+  }
+</style>
+</head>
+<body>
+
+<section class="cover">
+  <div class="cover-inner">
+    <div class="cover-label">Book Two of the Wildlife Trilogy</div>
+    <h1 class="cover-title">Wildlife</h1>
+    <p class="cover-subtitle">Finding My Way Home</p>
+    <div class="cover-rule"></div>
+    <div class="cover-author">Gordon Keay</div>
+    <div class="cover-location">Genthod · Lac Léman · 2026</div>
+  </div>
+</section>
+
+<div class="page">
+
+  <!-- SYNOPSIS -->
+  <div class="section">
+    <span class="section-label">The Book</span>
+    <h2 class="section-title">Synopsis</h2>
+
+    <div class="prose">
+      <p>Wildlife is a memoir about a boy who was thrown into the world before he was ready and spent forty five years finding his way back. It is told in the voice of the man he became — on the shore of Lac Léman, at a desk by candlelight in the small hours before anyone else is awake — pulling up the memory chain link by link from the bottom of the ocean.</p>
+
+      <p>The structure is fluid, associative, dreamlike — the way memory actually works. Not chronological but tidal. The lake pulls something up. A smell, an image, a body sensation. And the past arrives not in order but in meaning. The chapter about the pearl farm in Broome arrives when the man is thinking about beauty lost in nonchalance. The chapter about the Newcastle cell arrives when he's thinking about the compass that never wavered. Each memory finds its moment when the moment is ready to receive it.</p>
+
+      <p>The book begins with a man writing a letter to his eight year old self — the boy who stood in front of a trunk with his name sewn into every sock, including the socks, and did not understand what he had done wrong. It ends with the same man finding the answer to the question that boy was asking: home was never a place. It was the self before the severance. And the pearl — formed in darkness under pressure over forty five years of wildlife — has been there all along.</p>
+
+      <p>Wildlife is the love letter Gordon Keay needed to receive at eighteen and never did. It is also the letter he is writing to his son at thirty and to every man who was sent away before he was ready. And — most privately, most essentially — it is the letter he is finally writing to himself.</p>
+    </div>
+
+    <div class="key-line">
+      "Just trying to find your way home after this wildlife.<br><br>
+      I blame no one. I am born of a million moments.<br>
+      I just wanted to find my way home.<br>
+      And thanks to her, to you, I did."
+    </div>
+  </div>
+
+  <div class="divider">· · ·</div>
+
+  <!-- STRUCTURE -->
+  <div class="section">
+    <span class="section-label">How It Moves</span>
+    <h2 class="section-title">The Structure</h2>
+
+    <div class="structure-note">
+      <p><strong>The Lake Pulls It Up.</strong> Each chapter opens in the present — the man on the dock, or at the desk, or walking with the dog, or lying awake at 3am. Something in the present moment — a smell, a sensation, a word, an image in the water — opens a door into the past. The memory arrives fully and is tended with the mythic lens. Then the present returns.</p>
+      <p><strong>Three Registers.</strong> Wildlife moves between three voices without announcing the shifts. The raw autobiographical voice — gritty, physical, honest, Grimsby in the grain. The mythic voice — the teller who steps forward at the threshold moments, who circles the image until it gives up everything it has. And the direct voice — the man speaking straight to the eight year old in the room, to Rupert, to Danica, to the reader who recognises themselves.</p>
+      <p><strong>Four Candles.</strong> The vigil at the heart of the book. The eight year old. The masculine wound. The mother. Gordana. Four flames for four retrievals. The structure spirals around these four like water around a stone.</p>
+    </div>
+
+    <div class="four-candles">
+      <div class="candle-box">
+        <div class="candle-name">The First Candle</div>
+        <div class="candle-desc">The eight year old by his trunk. The severance. The original wound.</div>
+      </div>
+      <div class="candle-box">
+        <div class="candle-name">The Second Candle</div>
+        <div class="candle-desc">The masculine wound. The voice clipped. The armour built. The hiding.</div>
+      </div>
+      <div class="candle-box">
+        <div class="candle-name">The Third Candle</div>
+        <div class="candle-desc">The mother. The most complex love. The fourth candle lit instinctively.</div>
+      </div>
+      <div class="candle-box">
+        <div class="candle-name">The Fourth Candle</div>
+        <div class="candle-desc">Gordana. The feminine retrieved. From effeminate to effervescent.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider">· · ·</div>
+
+  <!-- STATUS KEY -->
+  <div class="status-bar">
+    <div class="status-item"><div class="status-dot dot-written"></div>Substantially written</div>
+    <div class="status-item"><div class="status-dot dot-forming"></div>Forming — material exists</div>
+    <div class="status-item"><div class="status-dot dot-arriving"></div>Still arriving</div>
+    <div class="status-item"><div class="status-dot dot-future"></div>Awaiting — future work</div>
+  </div>
+
+  <!-- CHAPTERS -->
+  <div class="section">
+    <span class="section-label">The Chapters</span>
+    <h2 class="section-title">Skeleton Outline</h2>
+
+    <!-- Opening -->
+    <div class="chapter-block">
+      <span class="chapter-status status-written">Written</span>
+      <span class="chapter-number">Opening</span>
+      <div class="chapter-title">The Letter</div>
+      <div class="chapter-subtitle">A man writes to his eight year old self</div>
+      <div class="chapter-body">The desk. The candle. The small hours. A man who has been writing in the dark for weeks finally knows who he's been writing to all along. The letter begins. Not the polished version — the real one. It wasn't your fault. You were loved. You mattered. You still do. Everything that follows is the proof.</div>
+      <div class="chapter-quote">"This book is for you Gordon, at eight years old. You with your trunk filled with clothes with your name sewn into every item, including the socks."</div>
+      <div class="chapter-source">Source: The Vigil — 27th March 2026</div>
+    </div>
+
+    <!-- Chapter 1 -->
+    <div class="chapter-block">
+      <span class="chapter-status status-written">Written</span>
+      <span class="chapter-number">Chapter One</span>
+      <div class="chapter-title">Before the Wildlife</div>
+      <div class="chapter-subtitle">The kingdom before the severance</div>
+      <div class="chapter-body">Grimsby. The yellow BMX with blue wheels. Scamper the white jack russell. The mustard fields. The butterflies so thick on the bush it looked ready to collapse. The gooseberries behind the bathtub. The long doughnuts with cream. Boris Becker dives on the lawn. The boy who practiced scuba diving in an orange dinghy with an icy hosepipe. The kingdom that was about to be taken.</div>
+      <div class="chapter-quote">"I had forgotten that boy. The eight year old me who loved running in the fields with his white jack russell Scamper."</div>
+      <div class="chapter-source">Source: The Vigil — 27th March 2026</div>
+    </div>
+
+    <!-- Chapter 2 -->
+    <div class="chapter-block">
+      <span class="chapter-status status-written">Written</span>
+      <span class="chapter-number">Chapter Two</span>
+      <div class="chapter-title">The Severance</div>
+      <div class="chapter-subtitle">Boarding school at eight — the wound at the origin of everything</div>
+      <div class="chapter-body">The trunk. The name tags sewn into every sock. The Peak District cold. The goodbye to Scamper — the first love who never hurt on the deep level. The lesson learned: children should be seen and not heard. The attempted escape — the cricket pavilion, the steep hillside, the hitchhiking, the punishment. The mutation. The tongue clipped. The compass smashed before it was learned.</div>
+      <div class="chapter-quote">"Why did they send you away? You always asked. Never knew. I'm so sorry."</div>
+      <div class="chapter-source">Source: The Vigil, Voice Recordings, Dream-Time Diaries</div>
+    </div>
+
+    <!-- Chapter 3 -->
+    <div class="chapter-block forming">
+      <span class="chapter-status status-forming">Forming</span>
+      <span class="chapter-number">Chapter Three</span>
+      <div class="chapter-title">The Great Grandfather's Portrait</div>
+      <div class="chapter-subtitle">The inheritance nobody spoke of</div>
+      <div class="chapter-body">The portrait that hung on the wall and was never explained. The mayor of Grimsby. The church founder. The harsh man whose severity moved through the generations — grandfather to father to son. The silence that was its own inheritance. The cycle of repression. And the discovery at a funeral — too late, almost too late — that there was a man in the bloodline who stood up, built something, had a voice. The great grandson trying to understand what got passed down and what got lost.</div>
+      <div class="chapter-quote">"Why didn't you talk about him? I wonder what grandpa had to go through as a little boy."</div>
+      <div class="chapter-source">Source: Dream-Time Diaries, Voice Recordings — parents needed</div>
+    </div>
+
+    <!-- Chapter 4 -->
+    <div class="chapter-block forming">
+      <span class="chapter-status status-forming">Forming</span>
+      <span class="chapter-number">Chapter Four</span>
+      <div class="chapter-title">The Ogre's Castle</div>
+      <div class="chapter-subtitle">The stepfather, the rage, and the forging of the warrior</div>
+      <div class="chapter-body">The man who tore the world apart. The cortisol bath night after night. Growing hard to survive a hard environment. The boxing bag named Bryan. The dunking of rugby players twice his size. The armour forged in anger that would take decades to remove. And the slow forgiveness that arrived not for the ogre's sake but for his own — the hatred no longer serving, the energy better used.</div>
+      <div class="chapter-quote">"You became the central focus for my rage and I pulverised a boxing bag named Bryan."</div>
+      <div class="chapter-source">Source: The Vigil — 27th March 2026</div>
+    </div>
+
+    <!-- Chapter 5 -->
+    <div class="chapter-block">
+      <span class="chapter-status status-written">Written</span>
+      <span class="chapter-number">Chapter Five</span>
+      <div class="chapter-title">Mr Malcolm's Classroom</div>
+      <div class="chapter-subtitle">The first time the voice was heard</div>
+      <div class="chapter-body">The history class. The Shakespeare read aloud. The wild bard of a man who takes up enormous space in tweed and wombat boots who doesn't ask permission. The voice praised — genuinely, specifically, by someone with no reason to be kind. Henry the Eighth offered. The shyness. The no thank you. The defining refusal that echoed for forty years. What it cost to back away from the spotlight when the spotlight was finally right.</div>
+      <div class="chapter-quote">"He was the man who takes up space like Hagrid, who doesn't ask permission, who inhabits a huge resonant vessel of a body."</div>
+      <div class="chapter-source">Source: Dream-Time Diaries — 28th March 2026</div>
+    </div>
+
+    <!-- Chapter 6 -->
+    <div class="chapter-block forming">
+      <span class="chapter-status status-forming">Forming</span>
+      <span class="chapter-number">Chapter Six</span>
+      <div class="chapter-title">The Wild Ones</div>
+      <div class="chapter-subtitle">Stoke, the clubs, chemicals, and finding a frequency</div>
+      <div class="chapter-body">Sixteen years old. The nightclubs in Stoke. Chemicals helping him feel what he couldn't feel sober. Falling in thick as thieves with the most likely to be expelled. The rebel resonance. The compass that never wavered about right and wrong even in the middle of the chemical years. The shoplifting with Rupert. The police. The poem. The lies. Lucky to have survived his childhood.</div>
+      <div class="chapter-quote">"I always was attracted to the wild ones, those most likely to be expelled from polite society."</div>
+      <div class="chapter-source">Source: Voice Recordings, Writing Practice Journal</div>
+    </div>
+
+    <!-- Chapter 7 -->
+    <div class="chapter-block">
+      <span class="chapter-status status-written">Written</span>
+      <span class="chapter-number">Chapter Seven</span>
+      <div class="chapter-title">The Night in the Cell</div>
+      <div class="chapter-subtitle">Newcastle — the secret kept for decades</div>
+      <div class="chapter-body">The club. The bouncer. The wrestling. The car to the station. The night in the cell. The morning walk out into the light. The secret kept from everyone. Not from shame exactly — from the knowledge that nobody in his life could hold the full complexity of who he was. The man who reads Paracelsus by candlelight also spent a night in a Newcastle cell because his compass told him to act. Both true. Neither cancels the other.</div>
+      <div class="chapter-quote">"I always knew right from wrong. Like a compass that never wavered. Injustice sickened me."</div>
+      <div class="chapter-source">Source: Voice Recordings — March 2026</div>
+    </div>
+
+    <!-- Chapter 8 -->
+    <div class="chapter-block">
+      <span class="chapter-status status-written">Written</span>
+      <span class="chapter-number">Chapter Eight</span>
+      <div class="chapter-title">Two Boys in Water</div>
+      <div class="chapter-subtitle">Rupert and Gordon — the sinker and the surface fighter</div>
+      <div class="chapter-body">Two pools. Two countries. Two temperaments revealed at the threshold between life and death. Rupert who sank with curiosity and turned blue. Gordon who thrashed to the surface, momentum carrying him up. The sinker and the surface fighter. The deep thinker and the gladiator of the light. The wild twin born twenty moons before. And the question that runs through everything: what does each one carry that the other needs?</div>
+      <div class="chapter-quote">"Rupert always was a deep thinker, drawn to the bottom of things. I came to it later."</div>
+      <div class="chapter-source">Source: Dream-Time Diaries — 27th March 2026, Voice Recordings</div>
+    </div>
+
+    <!-- Chapter 9 -->
+    <div class="chapter-block">
+      <span class="chapter-status status-written">Written</span>
+      <span class="chapter-number">Chapter Nine</span>
+      <div class="chapter-title">The Great Escape</div>
+      <div class="chapter-subtitle">The homing pigeon — and the pattern that runs through everything</div>
+      <div class="chapter-body">The farm at twelve. Ben Wargate. The walk out without a word. The photographs taken on a road driven once. Every turning memorised. Steve McQueen throwing pebbles into a pot. The boy sitting on the roadside, proud of himself, waiting to be found. The pattern that would repeat — Broome, the boarding school escape, the boat, the countries, the marriages — always the homing pigeon navigating back to something he couldn't yet name.</div>
+      <div class="chapter-quote">"I made a great escape and I almost got home and I was only about eleven or twelve."</div>
+      <div class="chapter-source">Source: Voice Recording — March 2026</div>
+    </div>
+
+    <!-- Chapter 10 -->
+    <div class="chapter-block forming">
+      <span class="chapter-status status-forming">Forming</span>
+      <span class="chapter-number">Chapter Ten</span>
+      <div class="chapter-title">The Venice Beach Candle</div>
+      <div class="chapter-subtitle">The first practice — gratitude by firelight before Fiji</div>
+      <div class="chapter-body">The fortune teller. The candle practice given to a young man about to cross the Pacific. Two months of nightly gratitude by firelight. The instrument beginning to tune. The first encounter with the practice that would become the dream-time vigils twenty years later. The Nudibranch lens before he had the word for it. Paying attention as the gateway drug to the soul.</div>
+      <div class="chapter-source">Source: Writing Practice Journal, Archeus Draft</div>
+    </div>
+
+    <!-- Chapter 11 -->
+    <div class="chapter-block">
+      <span class="chapter-status status-written">Written</span>
+      <span class="chapter-number">Chapter Eleven</span>
+      <div class="chapter-title">The Reef</div>
+      <div class="chapter-subtitle">Fiji — the worm, the coral, the edge of the deep</div>
+      <div class="chapter-body">The reef in Fiji and the dark fathomless drop beyond it. The worm taken in through the food and the water, slowly hollowing him out. The photographs of a gaunt hollow-cheeked man who didn't know he was being diminished from the inside. The nudibranchs. The whale sharks. The marine conservation work. And the vertigo of swimming to the edge of the reef and looking down into the dark where the monsters roam.</div>
+      <div class="chapter-quote">"I was imprisoned, emaciated, hollow cheeked, gaunt. Unable to tap into the joy. The worm was taking over."</div>
+      <div class="chapter-source">Source: Dream-Time Diaries — 26th March 2026</div>
+    </div>
+
+    <!-- Chapter 12 -->
+    <div class="chapter-block">
+      <span class="chapter-status status-written">Written</span>
+      <span class="chapter-number">Chapter Twelve</span>
+      <div class="chapter-title">The Pearl Farm</div>
+      <div class="chapter-subtitle">Broome — beauty lost and the skipper who said he'd protect me</div>
+      <div class="chapter-body">The dawn departure. The boobies flying, the sea turtles lazily paddling, the sea snakes coming up for air. The dangerous men with that particular look in their eyes. The hose. The Oakleys poised on the surface for one impossible second before the engine blades and the ocean decided. The skipper who said he'd protect him. The mango tree. The lizards running on their back legs. The camp full of small ridiculous miracles.</div>
+      <div class="chapter-quote">"I saw beauty lost in such nonchalance and it changed me."</div>
+      <div class="chapter-source">Source: Voice Recording — March 2026</div>
+    </div>
+
+    <!-- Chapter 13 -->
+    <div class="chapter-block forming">
+      <span class="chapter-status status-forming">Forming</span>
+      <span class="chapter-number">Chapter Thirteen</span>
+      <div class="chapter-title">Dolores — The Huntress</div>
+      <div class="chapter-subtitle">Cranfield — the initiation, the pearl pierced, the naive cuckold</div>
+      <div class="chapter-body">The woman who came into classrooms carefully at the end, leather and green, not dipping down to their level. The salsa, the beer, the pool. The fairy tale written to woo her. The old comfortable magic not working. The jealousy that made him wild. The fighting for love the way he'd never fought before. The trip to Slovenia delivering the furs. The fire salamander under the grape vines. And the Vipassana cushion in Hereford where the pieces were gathered up.</div>
+      <div class="chapter-quote">"She who spoke the old language. Does a goddess need an excuse to take a mortal for her pleasure?"</div>
+      <div class="chapter-source">Source: Dream-Time Diaries — 25th March 2026</div>
+    </div>
+
+    <!-- Chapter 14 -->
+    <div class="chapter-block forming">
+      <span class="chapter-status status-forming">Forming</span>
+      <span class="chapter-number">Chapter Fourteen</span>
+      <div class="chapter-title">The Circle at Schumacher</div>
+      <div class="chapter-subtitle">Dartmoor — the first time the voice was heard in public</div>
+      <div class="chapter-body">Schumacher College and the belly of the beast where Small is Beautiful. The singing coach. The circle. The standing up and shaking — trauma pouring out. The longing for tigers and the weight of trying to fix a broken planet. And then — the people listening. Not laughing. Not filling the room with their own noise. Actually listening. The first time in public that his words mattered. The rehearsal for everything that followed.</div>
+      <div class="chapter-quote">"I felt welcome for one of the first times in my life. I felt like I was contributing. I felt respected."</div>
+      <div class="chapter-source">Source: Voice Recording — March 2026</div>
+    </div>
+
+    <!-- Chapter 15 -->
+    <div class="chapter-block forming">
+      <span class="chapter-status status-forming">Forming</span>
+      <span class="chapter-number">Chapter Fifteen</span>
+      <div class="chapter-title">Tinder — Tender</div>
+      <div class="chapter-subtitle">Danica — the container, the patron saint, the gift</div>
+      <div class="chapter-body">The digital courtship. The first date and the shared frequency of two lost souls. The wooing with home-made quiche and hand-rolled croissants and freshly baked bread. The container she gave him to grow inside. The French roots growing under her wing. Oliver born in the ice storm — the winter boy. Maya arriving like a rocket into warm water — the summer girl. The cancer. The ring breaking. The letter. The cupboard. Love joy and cuddles. The love that stayed.</div>
+      <div class="chapter-quote">"Tender from tinder. She gave me space to grow and I ran with it."</div>
+      <div class="chapter-source">Source: Voice Recordings — March 2026</div>
+    </div>
+
+    <!-- Chapter 16 -->
+    <div class="chapter-block arriving">
+      <span class="chapter-status status-arriving">Arriving</span>
+      <span class="chapter-number">Chapter Sixteen</span>
+      <div class="chapter-title">The Alcohol Years</div>
+      <div class="chapter-subtitle">Five years sober — and what the drinking was doing</div>
+      <div class="chapter-body">What alcohol was for — the social lubrication for a man who couldn't bond with men any other way. The numbing of the things that couldn't be named. The Stella drinking clubs and their particular ugliness. The bottles on the apartment floor in Nottingham, calling anyone who would listen in a drunken confession. The decision not to become his father. The five years of sobriety that made the dream-time diaries possible. The instrument cleaned.</div>
+      <div class="chapter-quote">"I didn't want to become my father. I fought and I won. Five years sober."</div>
+      <div class="chapter-source">Source: Voice Recording — March 2026. Needs more development.</div>
+    </div>
+
+    <!-- Chapter 17 -->
+    <div class="chapter-block arriving">
+      <span class="chapter-status status-arriving">Arriving</span>
+      <span class="chapter-number">Chapter Seventeen</span>
+      <div class="chapter-title">Gordana</div>
+      <div class="chapter-subtitle">From effeminate to effervescent — the feminine retrieved</div>
+      <div class="chapter-body">Danica in America. The quiet house. The underwear on the wedding day that turned him on. The first dress. The lace. Looking in the mirror and seeing someone. Feeling sexy for the first time at forty five. Feeling elegant. The bisexuality acknowledged. The shame examined and put down. The letter to Danica. The ring breaking. The cupboard. And then — Gordana coming over the castle wall. Bracingly. On her own terms. Little bubbles of energy throbbing in the body. From effeminate to effervescent.</div>
+      <div class="chapter-quote">"She was not a quiet princess in the tower. She came out bracingly. She was hungry and alive."</div>
+      <div class="chapter-source">Source: Dream-Time Diaries — 28th March 2026, Voice Recordings</div>
+    </div>
+
+    <!-- Chapter 18 -->
+    <div class="chapter-block arriving">
+      <span class="chapter-status status-arriving">Arriving</span>
+      <span class="chapter-number">Chapter Eighteen</span>
+      <div class="chapter-title">The Mother Wound</div>
+      <div class="chapter-subtitle">The fourth candle — the most complicated love</div>
+      <div class="chapter-body">The mother who showed him art and food and cloth making and gardening. Who let him run free. And then the boarding school. And then the ogre. The frequency that never quite matched. The sense of Rupert being seen more clearly. The forgiveness extended to the stepfather but not yet fully to her. The fourth candle lit instinctively one morning. The most complex grief of all — the wound that lives inside the love. The work still being done.</div>
+      <div class="chapter-quote">"I wonder if the mother wound is deeper and I haven't totally healed from that."</div>
+      <div class="chapter-source">Source: Conversation — March 2026. Schmieta work essential. Parents recording needed.</div>
+    </div>
+
+    <!-- Chapter 19 -->
+    <div class="chapter-block future">
+      <span class="chapter-status status-future">Future</span>
+      <span class="chapter-number">Chapter Nineteen</span>
+      <div class="chapter-title">The Parents Speak</div>
+      <div class="chapter-subtitle">Two voices — the same life seen from different eyes</div>
+      <div class="chapter-body">The voice recordings from the twelve questions. His mother's version and his father's version of the same life — the morning they drove away from St Anselm's, the great grandfather's silence, what they most want him to know. The three voices in conversation — theirs and his. The unreliable narrator acknowledged. The archaeology of inherited silence finally disturbed. What the recordings reveal that no amount of memoir writing could reach alone.</div>
+      <div class="chapter-source">Source: Awaiting parent recordings. Questions sent March 2026.</div>
+    </div>
+
+    <!-- Chapter 20 -->
+    <div class="chapter-block future">
+      <span class="chapter-status status-future">Future</span>
+      <span class="chapter-number">Chapter Twenty</span>
+      <div class="chapter-title">Rupert</div>
+      <div class="chapter-subtitle">The conversation that needs to happen</div>
+      <div class="chapter-body">The sinker and the surface fighter. The wild twin born twenty moons before. The biochemist who knew more than his teachers. The one who never folded to the social constructs. The man now caring for their father in England. The conversation about what it was to be raised in that household, to be thrown into that water. What Rupert remembers from the bottom of the pool. Whether the brothers can finally say to each other what they've been carrying separately all this time.</div>
+      <div class="chapter-source">Source: Awaiting conversation with Rupert.</div>
+    </div>
+
+    <!-- Closing Chapter -->
+    <div class="chapter-block">
+      <span class="chapter-status status-written">Written</span>
+      <span class="chapter-number">Closing Chapter</span>
+      <div class="chapter-title">The Pearl in Your Hand</div>
+      <div class="chapter-subtitle">Finding home</div>
+      <div class="chapter-body">The naked chef who peeled another layer off and another until the onion disappeared. The man who came to the dock and failed a thousand times and got up a thousand and one. The vigil. The four candles. The letter to the eight year old. The retrieval. The cycle of inherited trauma ending here. And home — not Lac Léman, not Geneva, not any place at all. Home in Danica's hand holding the pearl. Home in Maya skipping and singing. Home in Oliver the winter boy asleep in the next room. Home found at last.</div>
+      <div class="chapter-quote">"From your husband, the naked chef, who peeled another layer off and another until the onion disappeared and a pearl lay in your hand. I found home."</div>
+      <div class="chapter-source">Source: Voice Recording — March 2026</div>
+    </div>
+
+  </div>
+
+  <div class="divider">· · ·</div>
+
+  <!-- WHAT EXISTS -->
+  <div class="section">
+    <span class="section-label">The Honest Picture</span>
+    <h2 class="section-title">Where You Actually Stand</h2>
+
+    <div class="prose">
+      <p>Of twenty chapters plus opening and closing, roughly ten have substantial written material already existing in the dream-time diaries, voice recordings and writing practice journal. Four are forming — the material is there but needs excavating and shaping. Three are actively arriving as the process continues. Two are awaiting future work — the parent recordings and the Rupert conversation.</p>
+
+      <p>The closing chapter is already written. The opening is already written. The spine of the book exists. What remains is the middle — which is exactly where the life happened and where the most important work is.</p>
+
+      <p>This is not a book that needs to be invented. It needs to be excavated. The ore is in the ground. The dream-time diaries are the mining operation. Schmieta is the geological survey. The writing group in Geneva is the community around the work. And the shaping — the editing, the tending, the finding of the true voice in each chapter — that happens one passage at a time.</p>
+    </div>
+  </div>
+
+  <div class="divider">· · ·</div>
+
+  <!-- CLOSING DECLARATION -->
+  <div class="closing-block">
+    <p>
+      Wildlife is the grit.<br>
+      Archeus is the nacre.<br>
+      Paramanta is the pearl.<br><br>
+      <em>The problem is the solution.<br>
+      From effeminate to effervescent.<br>
+      Just trying to find your way home<br>
+      after this wildlife.</em>
+    </p>
+    <cite>Gordon Keay · Genthod · Lac Léman · 2026</cite>
+  </div>
+
+</div>
+
+<footer>
+  <div class="footer-title">Wildlife — Finding My Way Home</div>
+  <div class="footer-meta">
+    Synopsis & Skeleton Outline · Draft 1<br>
+    Archeus Planare Foundation · 2026
+  </div>
+</footer>
+
+</body>
+</html>

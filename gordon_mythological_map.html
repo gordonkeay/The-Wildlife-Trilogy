@@ -1,0 +1,887 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Mythological Map — Gordon Keay</title>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=Cinzel:wght@400;500&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #1a1410;
+    --deep: #0d1e2c;
+    --ocean: #1a3d5c;
+    --gold: #c8a84a;
+    --parchment: #f4edd8;
+    --aged: #ede4cc;
+    --cream: #faf6ee;
+    --muted: #777777;
+    --water: #2e7fa8;
+    --verdigris: #4a8a6a;
+    --coral: #c4603a;
+    --purple: #6b4a8a;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--cream);
+    color: var(--ink);
+    font-family: 'EB Garamond', Georgia, serif;
+    font-size: 18px;
+    line-height: 1.85;
+  }
+
+  .cover {
+    min-height: 40vh;
+    background: var(--deep);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 60px 10vw;
+    position: relative;
+  }
+
+  .cover::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 60% 60% at 50% 100%, rgba(26,61,92,0.5) 0%, transparent 60%);
+    pointer-events: none;
+  }
+
+  .cover-inner { position: relative; z-index: 1; }
+
+  .cover-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--gold);
+    opacity: 0.7;
+    margin-bottom: 20px;
+  }
+
+  .cover-title {
+    font-family: 'Cinzel', serif;
+    font-size: clamp(1.8rem, 5vw, 3.5rem);
+    font-weight: 400;
+    color: var(--parchment);
+    letter-spacing: 0.1em;
+    line-height: 1.2;
+    margin-bottom: 16px;
+  }
+
+  .cover-subtitle {
+    font-family: 'EB Garamond', serif;
+    font-size: 1rem;
+    font-style: italic;
+    color: rgba(244,237,216,0.45);
+  }
+
+  .page {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 60px 8vw;
+  }
+
+  .section {
+    margin-bottom: 60px;
+  }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 32px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid rgba(13,30,44,0.12);
+  }
+
+  .section-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    flex-shrink: 0;
+  }
+
+  .icon-water { background: rgba(46,127,168,0.12); color: var(--water); }
+  .icon-fire { background: rgba(196,96,58,0.12); color: var(--coral); }
+  .icon-earth { background: rgba(74,138,106,0.12); color: var(--verdigris); }
+  .icon-air { background: rgba(200,168,74,0.12); color: var(--gold); }
+  .icon-journey { background: rgba(26,61,92,0.12); color: var(--ocean); }
+  .icon-creature { background: rgba(107,74,138,0.12); color: var(--purple); }
+  .icon-shadow { background: rgba(42,30,16,0.12); color: #5c3a1e; }
+  .icon-feminine { background: rgba(196,96,58,0.1); color: var(--coral); }
+  .icon-alchemy { background: rgba(200,168,74,0.12); color: var(--gold); }
+
+  .section-title {
+    font-family: 'Cinzel', serif;
+    font-size: 1.2rem;
+    font-weight: 400;
+    color: var(--ocean);
+    letter-spacing: 0.06em;
+  }
+
+  .theme-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 16px;
+  }
+
+  .theme-card {
+    background: white;
+    border: 1px solid rgba(13,30,44,0.08);
+    padding: 20px 24px;
+    position: relative;
+  }
+
+  .theme-card.water { border-left: 3px solid var(--water); }
+  .theme-card.fire { border-left: 3px solid var(--coral); }
+  .theme-card.earth { border-left: 3px solid var(--verdigris); }
+  .theme-card.air { border-left: 3px solid var(--gold); }
+  .theme-card.journey { border-left: 3px solid var(--ocean); }
+  .theme-card.creature { border-left: 3px solid var(--purple); }
+  .theme-card.shadow { border-left: 3px solid #5c3a1e; }
+  .theme-card.feminine { border-left: 3px solid var(--coral); }
+  .theme-card.alchemy { border-left: 3px solid var(--gold); }
+
+  .theme-name {
+    font-family: 'Cinzel', serif;
+    font-size: 0.95rem;
+    font-weight: 400;
+    color: var(--deep);
+    letter-spacing: 0.04em;
+    margin-bottom: 8px;
+  }
+
+  .theme-body {
+    font-size: 0.9rem;
+    color: #2a3a48;
+    line-height: 1.75;
+    margin-bottom: 10px;
+  }
+
+  .theme-quote {
+    font-style: italic;
+    font-size: 0.85rem;
+    color: var(--muted);
+    border-left: 2px solid rgba(13,30,44,0.1);
+    padding-left: 12px;
+    margin-top: 8px;
+    line-height: 1.6;
+  }
+
+  .theme-books {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-top: 10px;
+  }
+
+  .book-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 7px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 2px 7px;
+    border-radius: 2px;
+  }
+
+  .tag-wildlife { background: rgba(74,138,106,0.1); color: var(--verdigris); }
+  .tag-archeus { background: rgba(46,127,168,0.1); color: var(--water); }
+  .tag-paramanta { background: rgba(200,168,74,0.1); color: #8a6a1e; }
+
+  .intro-text {
+    font-size: 1rem;
+    font-style: italic;
+    color: var(--muted);
+    margin-bottom: 48px;
+    padding: 24px 32px;
+    border-left: 2px solid var(--gold);
+    background: var(--aged);
+    line-height: 1.8;
+  }
+
+  .divider {
+    text-align: center;
+    color: var(--gold);
+    opacity: 0.4;
+    margin: 48px 0;
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.4em;
+  }
+
+  footer {
+    background: var(--deep);
+    padding: 32px 8vw;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 60px;
+  }
+
+  footer .footer-title {
+    font-family: 'Cinzel', serif;
+    font-size: 0.85rem;
+    color: rgba(244,237,216,0.3);
+    letter-spacing: 0.1em;
+  }
+
+  footer .footer-meta {
+    font-family: 'DM Mono', monospace;
+    font-size: 8px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(244,237,216,0.15);
+    text-align: right;
+    line-height: 2;
+  }
+</style>
+</head>
+<body>
+
+<section class="cover">
+  <div class="cover-inner">
+    <div class="cover-label">The Dream Time Archive · March 2026</div>
+    <h1 class="cover-title">The Mythological Map</h1>
+    <p class="cover-subtitle">Every symbol, archetype and mythic theme from the writing of Gordon Keay</p>
+  </div>
+</section>
+
+<div class="page">
+
+  <div class="intro-text">
+    These are not borrowed symbols. Every image on this map arrived through your own writing — through the dream-time diaries, the voice recordings, the vigil, the dog walks. They are the mythic layer already present in a life fully and honestly lived. The map is here so you can see the whole constellation at once and understand what the writing already knows.
+  </div>
+
+  <!-- WATER & THE DEEP -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-water">〜</div>
+      <div class="section-title">Water, The Deep & The Threshold</div>
+    </div>
+    <div class="theme-grid">
+
+      <div class="theme-card water">
+        <div class="theme-name">The Lake as Teacher</div>
+        <div class="theme-body">Lac Léman as the primary mythic presence. Patient, ancient, indifferent to human drama. The water that receives without judgment. The teacher that asks only for attention.</div>
+        <div class="theme-quote">"The lake is the teacher. We are all still the students."</div>
+        <div class="theme-books">
+          <span class="book-tag tag-archeus">Archeus</span>
+          <span class="book-tag tag-paramanta">Paramanta</span>
+          <span class="book-tag tag-wildlife">Wildlife</span>
+        </div>
+      </div>
+
+      <div class="theme-card water">
+        <div class="theme-name">The Underworld Dive</div>
+        <div class="theme-body">The descent into the dark water — bioluminescent, primordial, terrifying. The classic hero's katabasis. Going down to retrieve what was lost. The vigil passage as full mythic underworld journey.</div>
+        <div class="theme-quote">"When a man falls into the underworld, he does so at great risk. Not just anyone is able to visit."</div>
+        <div class="theme-books">
+          <span class="book-tag tag-wildlife">Wildlife</span>
+          <span class="book-tag tag-archeus">Archeus</span>
+        </div>
+      </div>
+
+      <div class="theme-card water">
+        <div class="theme-name">The Breach</div>
+        <div class="theme-body">Rising from the deep into the air. The whale breach. The foil breach. The moment of emergence after the underworld journey. Seventy five centimetres above the water — the threshold between worlds.</div>
+        <div class="theme-quote">"I hit the light with a force. I breached. I soared out from the deep and flew into the sky."</div>
+        <div class="theme-books">
+          <span class="book-tag tag-paramanta">Paramanta</span>
+          <span class="book-tag tag-wildlife">Wildlife</span>
+        </div>
+      </div>
+
+      <div class="theme-card water">
+        <div class="theme-name">Two Boys In Water</div>
+        <div class="theme-body">Rupert who sank with curiosity and turned blue. Gordon who breached like a cork, fighting. The temperament of each revealed at the threshold between life and death.</div>
+        <div class="theme-quote">"The sinker and the surface fighter."</div>
+        <div class="theme-books">
+          <span class="book-tag tag-wildlife">Wildlife</span>
+        </div>
+      </div>
+
+      <div class="theme-card water">
+        <div class="theme-name">The Reef Edge</div>
+        <div class="theme-body">The boundary between the sunlit reef and the dark fathomless deep. The place of vertigo and terror and initiation. Swimming to the edge and looking down.</div>
+        <div class="theme-quote">"The dark danger that looks so intoxicating and draws you over and down."</div>
+        <div class="theme-books">
+          <span class="book-tag tag-wildlife">Wildlife</span>
+          <span class="book-tag tag-archeus">Archeus</span>
+        </div>
+      </div>
+
+      <div class="theme-card water">
+        <div class="theme-name">Bioluminescence</div>
+        <div class="theme-body">Light made by movement in the dark water. The teaching of the underworld — without perpetual motion the light goes out. The hands creating light by dancing through the primordial soup.</div>
+        <div class="theme-quote">"I learned to dance in the deep making light."</div>
+        <div class="theme-books">
+          <span class="book-tag tag-wildlife">Wildlife</span>
+          <span class="book-tag tag-paramanta">Paramanta</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="divider">· · ·</div>
+
+  <!-- FIRE & LIGHT -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-fire">✦</div>
+      <div class="section-title">Fire, Light & The Flame</div>
+    </div>
+    <div class="theme-grid">
+
+      <div class="theme-card fire">
+        <div class="theme-name">The Candle Vigil</div>
+        <div class="theme-body">The recurring practice of writing by candlelight before dawn. The flame as sacred witness. The pen, paper, candle and verveine as the four alchemical elements assembled for purification.</div>
+        <div class="theme-quote">"The pen hard metal, the inky water element, the paper earth element, the flickering fire element."</div>
+        <div class="theme-books">
+          <span class="book-tag tag-wildlife">Wildlife</span>
+          <span class="book-tag tag-archeus">Archeus</span>
+        </div>
+      </div>
+
+      <div class="theme-card fire">
+        <div class="theme-name">The Candle Falls</div>
+        <div class="theme-body">The candle sliding from the desk and shattering at the exact moment of approaching the truth about sexuality. Darkness as initiation. The broken vessel. Finding a match. Light remade by bare hands.</div>
+        <div class="theme-quote">"The candle searching for the glide."</div>
+        <div class="theme-books">
+          <span class="book-tag tag-wildlife">Wildlife</span>
+        </div>
+      </div>
+
+      <div class="theme-card fire">
+        <div class="theme-name">The Salamander</div>
+        <div class="theme-body">Paracelsus's fire spirit. The purifier. The creature that lives in flame without being consumed. The lizard found in the pond behind Dolores's house in Tolmin — real and symbolic simultaneously.</div>
+        <div class="theme-quote">"The salamander, the fire spirit, the purifier."</div>
+        <div class="theme-books">
+          <span class="book-tag tag-archeus">Archeus</span>
+          <span class="book-tag tag-wildlife">Wildlife</span>
+        </div>
+      </div>
+
+      <div class="theme-card fire">
+        <div class="theme-name">Making Fire from Nothing</div>
+        <div class="theme-body">The flint struck against the watch back. The nest of dried grass. The ember nursed to flame. The ancient skill of making light when all modern methods fail. Fire built from knowledge not equipment.</div>
+        <div class="theme-quote">"Just when thoughts of failure were creeping in — just then, at this point where it is the darkest — there was light."</div>
+        <div class="theme-books">
+          <span class="book-tag tag-archeus">Archeus</span>
+          <span class="book-tag tag-wildlife">Wildlife</span>
+        </div>
+      </div>
+
+      <div class="theme-card fire">
+        <div class="theme-name">The Venice Beach Candle</div>
+        <div class="theme-body">The fortune teller. The candle practice given to a young man before Fiji. Gratitude by firelight every night for two months. The first intentional practice. The origin of the dream-time vigils.</div>
+        <div class="theme-quote">"I became a hunter for the joy lying await at all times if we can just tune in enough to see it."</div>
+        <div class="theme-books">
+          <span class="book-tag tag-wildlife">Wildlife</span>
+          <span class="book-tag tag-archeus">Archeus</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="divider">· · ·</div>
+
+  <!-- THE PEARL & ALCHEMY -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-alchemy">◎</div>
+      <div class="section-title">The Pearl, Alchemy & Transformation</div>
+    </div>
+    <div class="theme-grid">
+
+      <div class="theme-card alchemy">
+        <div class="theme-name">Grit to Pearl</div>
+        <div class="theme-body">The central alchemical symbol of the trilogy. Grit — suffering, pressure, the wound — as the seed of beauty. The pearl built layer by layer in darkness. Solve et coagula. The base matter becoming the precious.</div>
+        <div class="theme-quote">"Pearls are made of grit. Grit centred, built slowly, layer after layer, from the inside out."</div>
+        <div class="theme-books">
+          <span class="book-tag tag-wildlife">Wildlife</span>
+          <span class="book-tag tag-archeus">Archeus</span>
+          <span class="book-tag tag-paramanta">Paramanta</span>
+        </div>
+      </div>
+
+      <div class="theme-card alchemy">
+        <div class="theme-name">The Pearl Farm</div>
+        <div class="theme-body">Broome, Western Australia. Real pearls washed off the deck by a casual wave. Beauty lost in nonchalance. The experience that embedded the pearl symbol in the body before it became metaphor.</div>
+        <div class="theme-quote">"I saw beauty lost in such nonchalance and it changed me."</div>
+        <div class="theme-books">
+          <span class="book-tag tag-wildlife">Wildlife</span>
+        </div>
+      </div>
+
+      <div class="theme-card alchemy">
+        <div class="theme-name">The Giant Clam</div>
+        <div class="theme-body">The underworld encounter. The tightest clam that had to be wooed to open. The feminine mystery. The pearl inside that was promised not to be taken. The reflection of the self finally seen inside her walls.</div>
+        <div class="theme-quote">"I had to woo her, to tickle her in just the right places. She had to know I was not going to steal her pearl."</div>
+        <div class="theme-books">
+          <span class="book-tag tag-wildlife">Wildlife</span>
+        </div>
+      </div>
+
+      <div class="theme-card alchemy">
+        <div class="theme-name">The Huntress & The Pearl Necklace</div>
+        <div class="theme-body">The goddess who takes the pearl, pierces it with a hunting knife and threads it onto her necklace. The initiatrix who takes innocence and adds it to her collection. Dolores as mythic feminine force.</div>
+        <div class="theme-quote">"She puts on her pearl necklace, smiles and cackles as another innocence has been taken."</div>
+        <div class="theme-books">
+          <span class="book-tag tag-wildlife">Wildlife</span>
+        </div>
+      </div>
+
+      <div class="theme-card alchemy">
+        <div class="theme-name">Bread as Alchemy</div>
+        <div class="theme-body">Flour, salt, water, heat — base elements transformed. The fire, the purification, the transfiguration. The bread makes the baker as the baker makes the bread. Daily alchemy as spiritual practice.</div>
+        <div class="theme-quote">"In this way the bread makes me as I bake it. We dance in a circularity."</div>
+        <div class="theme-books">
+          <span class="book-tag tag-archeus">Archeus</span>
+          <span class="book-tag tag-wildlife">Wildlife</span>
+        </div>
+      </div>
+
+      <div class="theme-card alchemy">
+        <div class="theme-name">Paracelsus</div>
+        <div class="theme-body">The 500 year old Swiss alchemist as ancestral presence. Archeus — the inner architect, the vital healing force. The man who walked out into nature because nature held all secrets. Solve et coagula as the philosophy of the whole project.</div>
+        <div class="theme-quote">"Books be damned. To the fire with your theories, go out and live it."</div>
+        <div class="theme-books">
+          <span class="book-tag tag-archeus">Archeus</span>
+          <span class="book-tag tag-paramanta">Paramanta</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="divider">· · ·</div>
+
+  <!-- THE JOURNEY & THE HOMING PIGEON -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-journey">→</div>
+      <div class="section-title">The Journey, The Exile & Finding Home</div>
+    </div>
+    <div class="theme-grid">
+
+      <div class="theme-card journey">
+        <div class="theme-name">The Homing Pigeon</div>
+        <div class="theme-body">The boy of twelve who memorised every turning on a road driven once and navigated home by instinct alone. The recurring pattern of escape and return. The whole life as navigation back to the self before the severance.</div>
+        <div class="theme-quote">"Like a homing pigeon my dad found me hours later sitting on the roadside throwing pebbles into a pot."</div>
+        <div class="theme-books">
+          <span class="book-tag tag-wildlife">Wildlife</span>
+        </div>
+      </div>
+
+      <div class="theme-card journey">
+        <div class="theme-name">The Severance</div>
+        <div class="theme-body">Eight years old. The trunk with name tags sewn into every sock. Boarding school. The wound at the origin of everything. The moment the voice was clipped and the map was taken away.</div>
+        <div class="theme-quote">"Banished from the kingdom without a tongue and no map or compass."</div>
+        <div class="theme-books">
+          <span class="book-tag tag-wildlife">Wildlife</span>
+        </div>
+      </div>
+
+      <div class="theme-card journey">
+        <div class="theme-name">The Great Escape</div>
+        <div class="theme-body">Three escapes: St Anselm's via the cricket pavilion. The farm at twelve. The boat in Broome. Steve McQueen throwing his ball. The recurring refusal to be contained. The wild soul that cannot be domesticated.</div>
+        <div class="theme-quote">"I made a great escape and I almost got home."</div>
+        <div class="theme-books">
+          <span class="book-tag tag-wildlife">Wildlife</span>
+        </div>
+      </div>
+
+      <div class="theme-card journey">
+        <div class="theme-name">Linguistic Exile</div>
+        <div class="theme-body">Twenty years in France and Switzerland. The voice that could tell jokes and hold rooms suddenly unable to carry across a language barrier. The compounding of the original wound. The expat vacuum.</div>
+        <div class="theme-quote">"A pearl lost on the top deck, washed with the waves and on the way over the deck and out to sea."</div>
+        <div class="theme-books">
+          <span class="book-tag tag-wildlife">Wildlife</span>
+        </div>
+      </div>
+
+      <div class="theme-card journey">
+        <div class="theme-name">Grimsby to Geneva</div>
+        <div class="theme-body">The arc the life draws on a map. The same arc Lac Léman draws. The world's largest fishing fleet to the shore of an Alpine lake. The journey that could not have been any other way.</div>
+        <div class="theme-quote">"From Grimsby to Geneva, following the same arc the Léman draws on a map."</div>
+        <div class="theme-books">
+          <span class="book-tag tag-wildlife">Wildlife</span>
+          <span class="book-tag tag-archeus">Archeus</span>
+        </div>
+      </div>
+
+      <div class="theme-card journey">
+        <div class="theme-name">Wildlife — Finding My Way Home</div>
+        <div class="theme-body">The title as mythic statement. Not wild life as nature. Wildlife as the state of being thrown into the world without a map and having to navigate back by instinct alone. The whole life as homecoming.</div>
+        <div class="theme-quote">"Just trying to find your way home after this wildlife."</div>
+        <div class="theme-books">
+          <span class="book-tag tag-wildlife">Wildlife</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="divider">· · ·</div>
+
+  <!-- CREATURES & TEACHERS -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-creature">✦</div>
+      <div class="section-title">The Creature Teachers</div>
+    </div>
+    <div class="theme-grid">
+
+      <div class="theme-card creature">
+        <div class="theme-name">The Manta Ray — Paramanta</div>
+        <div class="theme-body">The master of glide. The teacher. The guru. Paramahansa and Paracelsus and Manta Ray unified in one word. The creature that moves without effort, that embodies the art of glide as its natural state.</div>
+        <div class="theme-quote">"He isn't searching for the glide. He is the glide. The master glidition."</div>
+        <div class="theme-books">
+          <span class="book-tag tag-paramanta">Paramanta</span>
+          <span class="book-tag tag-archeus">Archeus</span>
+        </div>
+      </div>
+
+      <div class="theme-card creature">
+        <div class="theme-name">The Nudibranch</div>
+        <div class="theme-body">The sea slug with lungs on the outside. Naked lunged. The reward of slowing down enough to truly see. The nudibranch lens — full beam attention on the small beautiful things. I was the nudibranch.</div>
+        <div class="theme-quote">"The more you pay attention the more you find. Attention is a gift to channel into the little things."</div>
+        <div class="theme-books">
+          <span class="book-tag tag-archeus">Archeus</span>
+          <span class="book-tag tag-wildlife">Wildlife</span>
+          <span class="book-tag tag-paramanta">Paramanta</span>
+        </div>
+      </div>
+
+      <div class="theme-card creature">
+        <div class="theme-name">The Proboscis Monkey</div>
+        <div class="theme-body">Beauty that demolishes Western standards. The creature who inhabits himself completely without apology. The magnificent ridiculous nose worn with total dignity. The antidote to shame and self-consciousness.</div>
+        <div class="theme-quote">"I am becoming proboscis with bonobo tendencies with manta soul and nudi eyes."</div>
+        <div class="theme-books">
+          <span class="book-tag tag-wildlife">Wildlife</span>
+          <span class="book-tag tag-archeus">Archeus</span>
+        </div>
+      </div>
+
+      <div class="theme-card creature">
+        <div class="theme-name">The Bonobo</div>
+        <div class="theme-body">The primate led by love not dominance. Connection through the body without shame. The alternative to chimp aggression and toxic masculinity. Bonobo tendencies as a philosophy of relating.</div>
+        <div class="theme-quote">"I have always been more bonobo than chimp."</div>
+        <div class="theme-books">
+          <span class="book-tag tag-wildlife">Wildlife</span>
+        </div>
+      </div>
+
+      <div class="theme-card creature">
+        <div class="theme-name">Scamper</div>
+        <div class="theme-body">The white jack russell. The first love. The one who never hurt on the deep level. The unconditional gaze. The animal who saw Gordon clearly and loved what he saw without reservation or condition.</div>
+        <div class="theme-quote">"You were my first love. You never hurt me. Not on the deep level. Not like human hurt."</div>
+        <div class="theme-books">
+          <span class="book-tag tag-wildlife">Wildlife</span>
+        </div>
+      </div>
+
+      <div class="theme-card creature">
+        <div class="theme-name">The Worm</div>
+        <div class="theme-body">The literal parasite in Fiji and the cultural parasite in the mind. The thing that diminishes from the inside. The coloniser of the sacred biome. Also — without the worm there is no pearl. The wound and the gift as one.</div>
+        <div class="theme-quote">"I was being diminished from the inside. The worm was taking over, in control of the ship."</div>
+        <div class="theme-books">
+          <span class="book-tag tag-wildlife">Wildlife</span>
+        </div>
+      </div>
+
+      <div class="theme-card creature">
+        <div class="theme-name">The Homing Pigeon</div>
+        <div class="theme-body">Navigation by instinct. Memory of every turning on a road driven once. The animal intelligence that knows the way home even when the conscious mind has no map. The body carrying what the mind forgot.</div>
+        <div class="theme-quote">"Homing Pigeon Logic."</div>
+        <div class="theme-books">
+          <span class="book-tag tag-wildlife">Wildlife</span>
+        </div>
+      </div>
+
+      <div class="theme-card creature">
+        <div class="theme-name">The Grebe</div>
+        <div class="theme-body">The bird that reads water with complete attention. The first teacher in Archeus. The creature that taught Archeus to see — to stand still long enough to notice what was always there.</div>
+        <div class="theme-quote">"The grebe taught me to see."</div>
+        <div class="theme-books">
+          <span class="book-tag tag-archeus">Archeus</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="divider">· · ·</div>
+
+  <!-- THE FEMININE & THE MASCULINE -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-feminine">◑</div>
+      <div class="section-title">The Feminine, The Masculine & The Yin Yang</div>
+    </div>
+    <div class="theme-grid">
+
+      <div class="theme-card feminine">
+        <div class="theme-name">Gordana</div>
+        <div class="theme-body">The feminine form of Gordon. The part that wore the dresses and felt elegant and sexy for the first time at forty five. The retrieved part. The other half of the yin yang finally named and welcomed home.</div>
+        <div class="theme-quote">"I want to welcome Gordana gently into the world. To invite her in."</div>
+        <div class="theme-books">
+          <span class="book-tag tag-wildlife">Wildlife</span>
+        </div>
+      </div>
+
+      <div class="theme-card feminine">
+        <div class="theme-name">Dolores — The Huntress Goddess</div>
+        <div class="theme-body">Leather and green. Black boots. Long black hair like the inky black of the deep. The initiatrix. The one whose language he didn't know. The encounter that broke the old self open. The pearl that was pierced.</div>
+        <div class="theme-quote">"She who spoke the old language. Does a goddess need an excuse to take a mortal for her pleasure?"</div>
+        <div class="theme-books">
+          <span class="book-tag tag-wildlife">Wildlife</span>
+        </div>
+      </div>
+
+      <div class="theme-card feminine">
+        <div class="theme-name">The Yin Yang — The 69</div>
+        <div class="theme-body">The masculine and feminine entwined in eternal embrace. Each containing a seed of the other. The philosophical architecture of the whole trilogy. Surface and deep. Fighter and thinker. Gordon and Gordana.</div>
+        <div class="theme-quote">"The cosmic sixty nine. To welcome the feminine into the masculine. To interlock the two."</div>
+        <div class="theme-books">
+          <span class="book-tag tag-wildlife">Wildlife</span>
+          <span class="book-tag tag-archeus">Archeus</span>
+          <span class="book-tag tag-paramanta">Paramanta</span>
+        </div>
+      </div>
+
+      <div class="theme-card feminine">
+        <div class="theme-name">The Cuckold</div>
+        <div class="theme-body">Hephaestus at his forge. The man who loves most completely and is most vulnerable to loss. Not humiliation but transformation. The maker who outlasts the warrior. The naive cuckold who went to Vipassana and came back changed.</div>
+        <div class="theme-quote">"The naive cuckhold... shaped in the cold darkness, under pressure."</div>
+        <div class="theme-books">
+          <span class="book-tag tag-wildlife">Wildlife</span>
+        </div>
+      </div>
+
+      <div class="theme-card feminine">
+        <div class="theme-name">The Cherry Blossom</div>
+        <div class="theme-body">Beauty fragile and seasonal. The cold snap that threatens to freeze the flower before it blooms. The feminine form luscious and overflowing in rich giving bounty. Beauty that requires the right conditions to survive.</div>
+        <div class="theme-quote">"The cold frost snaps her flowery thong... timing is everything."</div>
+        <div class="theme-books">
+          <span class="book-tag tag-wildlife">Wildlife</span>
+          <span class="book-tag tag-archeus">Archeus</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="divider">· · ·</div>
+
+  <!-- THE SHADOW & THE WOUND -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-shadow">●</div>
+      <div class="section-title">The Shadow, The Wound & The Ogre</div>
+    </div>
+    <div class="theme-grid">
+
+      <div class="theme-card shadow">
+        <div class="theme-name">Inherited Silence</div>
+        <div class="theme-body">The great grandfather whose portrait hung on the wall but whose story was never told. The silence that moved from generation to generation. The cycle of repression and mutism. The chain being broken.</div>
+        <div class="theme-quote">"The cycle of inherited trauma stops here. It ends with me."</div>
+        <div class="theme-books">
+          <span class="book-tag tag-wildlife">Wildlife</span>
+        </div>
+      </div>
+
+      <div class="theme-card shadow">
+        <div class="theme-name">The Ogre</div>
+        <div class="theme-body">The stepfather who tore the world apart. The monster in the castle. The source of cortisol and fear and the need for armour. Named, held, eventually forgiven — not because he deserved it but because the hatred was no longer serving.</div>
+        <div class="theme-quote">"You were the monster. You scared me and I hated you for tearing my world apart."</div>
+        <div class="theme-books">
+          <span class="book-tag tag-wildlife">Wildlife</span>
+        </div>
+      </div>
+
+      <div class="theme-card shadow">
+        <div class="theme-name">The Clipped Tongue</div>
+        <div class="theme-body">Children should be seen and not heard. The voice suppressed before it could develop. The mutism. The linguistic exile. Mr Malcolm hearing it anyway. The whole project as the restoration of the clipped tongue.</div>
+        <div class="theme-quote">"When your tongue was cut off and you were cast off before you were shaped, left in the wilds."</div>
+        <div class="theme-books">
+          <span class="book-tag tag-wildlife">Wildlife</span>
+        </div>
+      </div>
+
+      <div class="theme-card shadow">
+        <div class="theme-name">The Topsy Turvy World</div>
+        <div class="theme-body">The world that has inverted its own logic. Sunscreen causes cancer. Cleaning products cause lung cancer. Social media is anti-social. The worm inside the mind. The cultural parasite that profits from insecurity.</div>
+        <div class="theme-quote">"We ride electric bikes and lose our power. Then go to a gym to get it back."</div>
+        <div class="theme-books">
+          <span class="book-tag tag-archeus">Archeus</span>
+          <span class="book-tag tag-wildlife">Wildlife</span>
+        </div>
+      </div>
+
+      <div class="theme-card shadow">
+        <div class="theme-name">The Armour</div>
+        <div class="theme-body">The protective structure built in childhood that became a prison. Fight, flight or freeze as a way of life. The man who had to be guarded to survive environments that were hostile to his true nature.</div>
+        <div class="theme-quote">"Your guard goes up, your armour on and you fight, flight or freeze your way through life."</div>
+        <div class="theme-books">
+          <span class="book-tag tag-wildlife">Wildlife</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="divider">· · ·</div>
+
+  <!-- THE TOOLS -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-earth">⊕</div>
+      <div class="section-title">The Tools & The Making</div>
+    </div>
+    <div class="theme-grid">
+
+      <div class="theme-card earth">
+        <div class="theme-name">The Foil</div>
+        <div class="theme-body">The tool that shapes the rider as the rider shapes it. The practice that teaches what no teacher could say. The dock start as initiation. A thousand falls as the path to the glide. The manta ray out of water made useful.</div>
+        <div class="theme-quote">"When we shape it, it will shape us. If the wand chooses the wizard, does the foil choose the rider?"</div>
+        <div class="theme-books">
+          <span class="book-tag tag-paramanta">Paramanta</span>
+          <span class="book-tag tag-archeus">Archeus</span>
+          <span class="book-tag tag-wildlife">Wildlife</span>
+        </div>
+      </div>
+
+      <div class="theme-card earth">
+        <div class="theme-name">The Bent Nib</div>
+        <div class="theme-body">The pen that flew from the hand and hit the bin at the exact moment of approaching the truth. The nib bent permanently. The tool shaped by the moment of contact with the truth. Carrying the scar of the important night.</div>
+        <div class="theme-quote">"The tools that shape we shape end up shaping us. The nib of my pen now bent at an angle, never to be the same again."</div>
+        <div class="theme-books">
+          <span class="book-tag tag-wildlife">Wildlife</span>
+        </div>
+      </div>
+
+      <div class="theme-card earth">
+        <div class="theme-name">The Stone Effect</div>
+        <div class="theme-body">Not the random butterfly effect but the intentional stone on water. Visible ripples. Concentric circles of ever expanding reach. The choice made in the here and now to give yourself to a project bigger than you know.</div>
+        <div class="theme-quote">"This isn't the butterfly effect, that's too random. This is the stone effect."</div>
+        <div class="theme-books">
+          <span class="book-tag tag-archeus">Archeus</span>
+          <span class="book-tag tag-paramanta">Paramanta</span>
+          <span class="book-tag tag-wildlife">Wildlife</span>
+        </div>
+      </div>
+
+      <div class="theme-card earth">
+        <div class="theme-name">The Drum</div>
+        <div class="theme-body">The heartbeat as drum. Martin Shaw's blue Tibetan tent. The Balinese gamelan. The drum that only stops beating when the light goes out. Dancing to the beat of your own drum as the philosophy of perpetual motion.</div>
+        <div class="theme-quote">"The drum only stops beating when the light goes out. So I had to keep dancing."</div>
+        <div class="theme-books">
+          <span class="book-tag tag-paramanta">Paramanta</span>
+          <span class="book-tag tag-wildlife">Wildlife</span>
+        </div>
+      </div>
+
+      <div class="theme-card earth">
+        <div class="theme-name">The Leading Edge</div>
+        <div class="theme-body">The foil's most vulnerable and most consequential surface. The place where magic happens. The leading edge hit on a rock — the bent nib. Protect the leading edge as a philosophy of life and craft.</div>
+        <div class="theme-quote">"I hit the leading edge on a rock. The leading edge, where the magic happens."</div>
+        <div class="theme-books">
+          <span class="book-tag tag-paramanta">Paramanta</span>
+          <span class="book-tag tag-wildlife">Wildlife</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="divider">· · ·</div>
+
+  <!-- THE MANIFESTO -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-air">◇</div>
+      <div class="section-title">The Manifesto — The Author's Declaration</div>
+    </div>
+
+    <div style="background: var(--deep); padding: 48px; margin-bottom: 32px; text-align: center;">
+      <p style="font-family: 'EB Garamond', serif; font-size: 1.3rem; font-style: italic; color: var(--parchment); line-height: 2; letter-spacing: 0.02em;">
+        I am becoming proboscis with bonobo tendencies<br>
+        with manta soul and nudi eyes.<br>
+        I breathe from the outside and grow from the inside.<br>
+        I am not afraid of saying the big things.<br>
+        I carry no shame.<br><br>
+        I am Archeus and I speak for nature and the dispossessed.
+      </p>
+      <p style="font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 0.3em; text-transform: uppercase; color: rgba(244,237,216,0.3); margin-top: 24px;">Gordon Keay · Genthod · Lac Léman · 2026</p>
+    </div>
+
+    <div class="theme-grid">
+
+      <div class="theme-card air">
+        <div class="theme-name">On cherche le glisse</div>
+        <div class="theme-body">We search for the glide. The through line of the whole trilogy. Not a destination but a practice. The motto of a life that began in a mustard field in Lincolnshire and arrived on the shore of Lac Léman.</div>
+        <div class="theme-books">
+          <span class="book-tag tag-paramanta">Paramanta</span>
+          <span class="book-tag tag-archeus">Archeus</span>
+          <span class="book-tag tag-wildlife">Wildlife</span>
+        </div>
+      </div>
+
+      <div class="theme-card air">
+        <div class="theme-name">The Love Letter</div>
+        <div class="theme-body">The whole project understood completely. A love letter to the self. To the eight year old by his trunk. To Scamper. To the lake. To all the beautiful souls carried to the candle. A letter of gratitude to all the people who have been there.</div>
+        <div class="theme-quote">"This is a love letter to me for me."</div>
+        <div class="theme-books">
+          <span class="book-tag tag-wildlife">Wildlife</span>
+          <span class="book-tag tag-archeus">Archeus</span>
+          <span class="book-tag tag-paramanta">Paramanta</span>
+        </div>
+      </div>
+
+      <div class="theme-card air">
+        <div class="theme-name">The Soul Family</div>
+        <div class="theme-body">Soiley Whitting's teaching. The people who vibrate at the same frequency. Darrell Tatum, Bob the panel beater, the ISFIT friends, Mr Malcolm, the skipper in Broome. Carried to the candle. Treasures. People are treasures.</div>
+        <div class="theme-quote">"We are part of a soul family and those soul families will stay together regardless of time or space."</div>
+        <div class="theme-books">
+          <span class="book-tag tag-wildlife">Wildlife</span>
+        </div>
+      </div>
+
+      <div class="theme-card air">
+        <div class="theme-name">The Three Candles</div>
+        <div class="theme-body">The vigil. Three flames lit for the victims. The eight year old, the silenced ones, the dispossessed. The ceremony of retrieval. The sacred space created before dawn for the healing work.</div>
+        <div class="theme-quote">"I held a vigil for all of the victims. I sat attentive with three candles lit and invited them to sit with me."</div>
+        <div class="theme-books">
+          <span class="book-tag tag-wildlife">Wildlife</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <div class="footer-title">The Mythological Map — Gordon Keay</div>
+  <div class="footer-meta">
+    Compiled from the Dream Time Diaries<br>
+    March 2026 · Genthod · Lac Léman
+  </div>
+</footer>
+
+</body>
+</html>

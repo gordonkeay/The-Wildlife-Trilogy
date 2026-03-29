@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Pump Foil Lab — Vision Document</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #1a1a18;
+    --water: #2a5c6e;
+    --water-light: #4a8fa3;
+    --reed: #8a7a52;
+    --reed-light: #c4b07a;
+    --mist: #e8ede8;
+    --foam: #f4f7f2;
+    --dawn: #d4e8e0;
+    --accent: #c05a2a;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--foam);
+    color: var(--ink);
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: 18px;
+    line-height: 1.75;
+    overflow-x: hidden;
+  }
+
+  header {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 80px 10vw;
+    background: var(--water);
+    overflow: hidden;
+  }
+
+  header::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 120% 60% at 80% 50%, rgba(42,92,110,0) 0%, rgba(16,40,50,0.7) 100%),
+      repeating-linear-gradient(170deg, transparent 0px, transparent 38px,
+        rgba(255,255,255,0.02) 38px, rgba(255,255,255,0.02) 40px);
+    pointer-events: none;
+  }
+
+  .wave-bg { position: absolute; bottom: -2px; left: 0; width: 100%; opacity: 0.15; }
+
+  .stamp {
+    display: inline-block;
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--reed-light);
+    border: 1px solid var(--reed-light);
+    padding: 6px 14px;
+    margin-bottom: 40px;
+    opacity: 0.85;
+    animation: fadeUp 1s ease both;
+  }
+
+  header h1 {
+    font-size: clamp(3rem, 8vw, 7rem);
+    font-weight: 300;
+    color: #fff;
+    line-height: 1.05;
+    max-width: 800px;
+    animation: fadeUp 1s 0.2s ease both;
+    letter-spacing: -0.02em;
+  }
+
+  header h1 em { font-style: italic; color: var(--reed-light); }
+
+  header p.tagline {
+    margin-top: 32px;
+    font-size: 1.3rem;
+    color: rgba(255,255,255,0.7);
+    max-width: 560px;
+    font-style: italic;
+    animation: fadeUp 1s 0.4s ease both;
+  }
+
+  .scroll-hint {
+    position: absolute;
+    bottom: 40px;
+    left: 10vw;
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    color: rgba(255,255,255,0.3);
+    text-transform: uppercase;
+    animation: fadeUp 1s 0.8s ease both;
+  }
+
+  main { max-width: 1100px; margin: 0 auto; padding: 0 8vw; }
+
+  section {
+    padding: 80px 0;
+    border-bottom: 1px solid rgba(42,92,110,0.12);
+  }
+
+  section:last-child { border-bottom: none; }
+
+  .section-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--water-light);
+    margin-bottom: 28px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .section-label::after {
+    content: '';
+    flex: 1;
+    max-width: 60px;
+    height: 1px;
+    background: var(--water-light);
+    opacity: 0.4;
+  }
+
+  h2 {
+    font-size: clamp(2rem, 4vw, 3.2rem);
+    font-weight: 300;
+    line-height: 1.15;
+    color: var(--water);
+    margin-bottom: 28px;
+    letter-spacing: -0.01em;
+  }
+
+  h2 em { font-style: italic; color: var(--accent); }
+
+  h3 {
+    font-size: 1.35rem;
+    font-weight: 600;
+    color: var(--water);
+    margin: 36px 0 12px;
+  }
+
+  p { margin-bottom: 18px; max-width: 680px; color: #2e2e2c; }
+
+  .pull-quote {
+    margin: 48px 0;
+    padding: 32px 40px;
+    border-left: 3px solid var(--reed);
+    background: var(--dawn);
+    font-size: 1.45rem;
+    font-style: italic;
+    color: var(--water);
+    line-height: 1.55;
+    max-width: 680px;
+  }
+
+  .pull-quote cite {
+    display: block;
+    margin-top: 12px;
+    font-size: 0.85rem;
+    font-style: normal;
+    font-family: 'Space Mono', monospace;
+    letter-spacing: 0.1em;
+    color: var(--reed);
+    opacity: 0.8;
+  }
+
+  .pillars {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 2px;
+    margin: 40px 0;
+  }
+
+  .pillar {
+    background: var(--mist);
+    padding: 32px 26px;
+    transition: background 0.3s;
+  }
+
+  .pillar:hover { background: var(--dawn); }
+  .pillar-icon { font-size: 1.8rem; margin-bottom: 14px; display: block; }
+
+  .pillar h4 {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--water);
+    margin-bottom: 10px;
+  }
+
+  .pillar p { font-size: 0.95rem; margin: 0; color: #3a3a38; }
+
+  .values-row { display: flex; flex-wrap: wrap; gap: 10px; margin: 32px 0; }
+
+  .value-tag {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 7px 16px;
+    border: 1px solid currentColor;
+  }
+
+  .value-tag.water { color: var(--water); }
+  .value-tag.reed  { color: var(--reed); }
+  .value-tag.accent { color: var(--accent); }
+
+  .activities {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px;
+    margin: 36px 0;
+  }
+
+  .activity { background: var(--ink); color: #fff; padding: 28px 24px; }
+  .activity:nth-child(even) { background: var(--water); }
+  .activity:nth-child(3) { background: var(--reed); }
+  .activity:nth-child(6) { background: var(--accent); }
+  .activity:nth-child(7) { background: #2a4a3e; }
+  .activity:nth-child(8) { background: #3d2a1a; }
+
+  .activity h4 {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+    opacity: 0.6;
+  }
+
+  .activity p { color: rgba(255,255,255,0.85); font-size: 0.95rem; margin: 0; max-width: none; }
+
+  .principles { counter-reset: principle; list-style: none; margin: 32px 0; }
+
+  .principles li {
+    counter-increment: principle;
+    display: flex;
+    gap: 24px;
+    align-items: flex-start;
+    padding: 20px 0;
+    border-bottom: 1px solid rgba(42,92,110,0.1);
+  }
+
+  .principles li::before {
+    content: counter(principle, decimal-leading-zero);
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    color: var(--water-light);
+    min-width: 28px;
+    padding-top: 4px;
+    letter-spacing: 0.05em;
+  }
+
+  .principles li p { margin: 0; font-size: 1.05rem; }
+  .principles li strong { color: var(--water); display: block; font-size: 1.1rem; }
+
+  .health-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 2px;
+    margin: 36px 0;
+  }
+
+  .health-stat {
+    background: var(--water);
+    color: white;
+    padding: 28px 24px;
+    text-align: center;
+  }
+
+  .health-stat:nth-child(even) { background: var(--ink); }
+  .health-stat:nth-child(3) { background: var(--reed); }
+  .health-stat:nth-child(4) { background: var(--accent); }
+
+  .health-stat .number {
+    font-size: 2.2rem;
+    font-weight: 300;
+    display: block;
+    margin-bottom: 8px;
+    line-height: 1;
+  }
+
+  .health-stat .label {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    opacity: 0.75;
+  }
+
+  .safety-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px;
+    margin: 32px 0;
+  }
+
+  .safety-item { padding: 24px; background: var(--mist); }
+  .safety-item:nth-child(odd) { background: var(--dawn); }
+
+  .safety-item h4 {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--water);
+    margin-bottom: 8px;
+  }
+
+  .safety-item p { font-size: 0.95rem; margin: 0; }
+
+  .horizon { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; margin: 36px 0; }
+  .horizon-phase { padding: 32px 24px; }
+  .horizon-phase:nth-child(1) { background: var(--mist); }
+  .horizon-phase:nth-child(2) { background: var(--dawn); }
+  .horizon-phase:nth-child(3) { background: var(--water); color: white; }
+
+  .horizon-phase h4 {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+    opacity: 0.55;
+  }
+
+  .horizon-phase .phase-title { font-size: 1.25rem; font-weight: 600; margin-bottom: 12px; }
+  .horizon-phase p { font-size: 0.92rem; margin: 0; max-width: none; opacity: 0.88; color: inherit; }
+
+  .wave-rule {
+    margin: 40px 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--water-light), var(--reed-light), transparent);
+    max-width: 200px;
+  }
+
+  .subscription-box {
+    background: var(--ink);
+    color: white;
+    padding: 40px 44px;
+    margin: 40px 0;
+    max-width: 680px;
+    position: relative;
+  }
+
+  .subscription-box::before {
+    content: '◆';
+    position: absolute;
+    top: 20px;
+    right: 24px;
+    font-size: 0.7rem;
+    color: var(--reed-light);
+    opacity: 0.5;
+  }
+
+  .subscription-box h4 {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--reed-light);
+    margin-bottom: 16px;
+  }
+
+  .subscription-box p {
+    color: rgba(255,255,255,0.8);
+    font-size: 1.05rem;
+    margin-bottom: 12px;
+    max-width: none;
+  }
+
+  .subscription-box p:last-child { margin-bottom: 0; }
+
+  /* Origin note — now used mid-document */
+  .origin-note {
+    margin: 40px 0;
+    padding: 28px 36px;
+    border-left: 3px solid var(--reed);
+    background: var(--dawn);
+    max-width: 680px;
+    font-size: 1.1rem;
+    color: var(--water);
+    font-style: italic;
+    line-height: 1.75;
+  }
+
+  .origin-note cite {
+    display: block;
+    margin-top: 12px;
+    font-size: 0.8rem;
+    font-style: normal;
+    font-family: 'Space Mono', monospace;
+    letter-spacing: 0.1em;
+    color: var(--reed);
+    opacity: 0.8;
+  }
+
+  footer {
+    background: var(--ink);
+    color: rgba(255,255,255,0.45);
+    padding: 60px 10vw;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 24px;
+  }
+
+  footer .footer-name { font-size: 1.8rem; font-weight: 300; color: white; letter-spacing: -0.02em; }
+  footer .footer-name em { font-style: italic; color: var(--reed-light); }
+
+  footer .footer-meta {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    text-align: right;
+    line-height: 2;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  @media (max-width: 660px) {
+    .activities, .safety-grid, .horizon { grid-template-columns: 1fr; }
+    .pillars { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="stamp">Vision Document · 2026 · Lac Léman · Open to All</div>
+  <h1>The <em>Biomimetic</em><br>Pump Foil Lab</h1>
+  <p class="tagline">A dojo, a temple, a craft studio — where nature teaches us how to move on water, and the community makes it worth coming back to.</p>
+  <div class="scroll-hint">↓ scroll to explore</div>
+  <svg class="wave-bg" viewBox="0 0 1440 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0 60 C240 20 480 100 720 60 C960 20 1200 100 1440 60 L1440 120 L0 120 Z" fill="white"/>
+  </svg>
+</header>
+
+<main>
+
+  <!-- 00 WHY THIS EXISTS -->
+  <section style="padding: 100px 0 80px;">
+    <div class="section-label">00 · Why This Exists</div>
+    <h2>An invitation to<br>something <em>more</em></h2>
+
+    <p>Most of us are already trying. We lace up our running shoes because we want to be healthy — and running is free, accessible, and for many people a genuine source of joy and mental clarity. We join a CrossFit class or a gym because we want to feel strong, and because something in us recognises that doing hard things alongside other people feels fundamentally better than doing them alone. We work hard because we want to contribute, to build something, to feel that what we do has value.</p>
+
+    <p>These instincts are exactly right. The desire to move, to belong, to do work that matters — these are among the most human things there are. This project is not a critique of any of that. It is an addition to it. Another door, left open.</p>
+
+    <p>The reality is that many of us are still looking for something we haven't quite found yet. Around 70% of regular runners experience injuries that interrupt their practice — not because they're doing something wrong, but because the body eventually asks for variety, for softness, for water instead of pavement. High-intensity training, loved by millions for the community and the challenge it creates, can sometimes leave the body asking for restoration as much as effort. And for all the fitness options available to us, genuine outdoor community — the kind where people of different ages and backgrounds build something real together — remains surprisingly rare.</p>
+
+    <div class="pull-quote">
+      "The missing piece, almost always, is community. People don't join CrossFit for the workouts alone — they join for the belonging. They want to feel good, to be seen, to share something real with other people. We want that for everyone, on the water and in the workshop, for as long as their body wants to move."
+      <cite>— Gordon Keay, Founder</cite>
+    </div>
+
+    <p>The Pump Foil Lab is a place where those needs are met — through a practice that is low-impact and lifelong, a workshop where things are made and repaired together, and a community that is genuinely open to all. Something that sits alongside whatever else you love, and quietly makes everything better.</p>
+
+    <p>It responds, with care and intention, to several things our time is asking of us.</p>
+
+    <div class="pillars" style="margin-top: 36px;">
+      <div class="pillar">
+        <span class="pillar-icon">🌍</span>
+        <h4>Climate & Materials</h4>
+        <p>Bioregional materials. Circular flows. Zero-emission sport. A model of making that works with the land — and shows that beautiful, high-performance things can be built this way.</p>
+      </div>
+      <div class="pillar">
+        <span class="pillar-icon">📵</span>
+        <h4>Presence & Attention</h4>
+        <p>The lake asks for your full presence. The foil demands it. Something genuinely absorbing — where the phone stays on the shore and the mind finds the rest it has been looking for.</p>
+      </div>
+      <div class="pillar">
+        <span class="pillar-icon">🫂</span>
+        <h4>Community & Belonging</h4>
+        <p>The workshop is where strangers become friends. The water session is a shared experience. Community is not a side effect here — it is the point. The reason people come back.</p>
+      </div>
+      <div class="pillar">
+        <span class="pillar-icon">🏃</span>
+        <h4>Lifelong Movement</h4>
+        <p>A practice that complements running and strength training — or gently replaces them when the body asks for something kinder. Full-body, low-impact, sustainable across decades. For every age, every starting point.</p>
+      </div>
+      <div class="pillar">
+        <span class="pillar-icon">⚗️</span>
+        <h4>Meaningful Making</h4>
+        <p>There is something deeply satisfying about making something with your hands, understanding how it works, and caring for it over time. The lab offers that — alongside people who find the same thing nourishing.</p>
+      </div>
+      <div class="pillar">
+        <span class="pillar-icon">🌱</span>
+        <h4>A Better Model</h4>
+        <p>Open source. Non-commercial. Subscription over ownership. Repair over replacement. A way of doing things that leaves everyone better off — a living example others can take and use anywhere.</p>
+      </div>
+    </div>
+
+    <p style="margin-top: 40px;">This project doesn't ask you to abandon anything you already love. It simply opens a door — and invites you through it.</p>
+  </section>
+
+  <!-- 01 ESSENCE -->
+  <section>
+    <div class="section-label">01 · Essence</div>
+    <h2>What is this place?</h2>
+
+    <p>The Pump Foil Lab is an open, intergenerational workshop on the water's edge — a living laboratory where biomimicry, craft, community, and movement practice converge. It is not a conventional business, and not a conventional school. It is a dojo in the deepest sense: a place where mastery is pursued together, where things are made and repaired by hand, where the lake is both classroom and medicine — and where everyone is welcome from the very first day.</p>
+
+    <p>At its heart is a simple and joyful question: <strong>what can fish, birds, whales and water itself teach us about moving through it?</strong> The answers become foils, wings, hulls — and the practices that bring them alive.</p>
+
+    <p>Open doors. Open innovation. The lab belongs to those who show up — beginner or expert, young or old, designer or poet, runner or sailor or complete newcomer. All bring something. All leave with more than they came with.</p>
+
+    <div class="values-row">
+      <span class="value-tag water">Biomimicry</span>
+      <span class="value-tag reed">Circularity</span>
+      <span class="value-tag water">Open Innovation</span>
+      <span class="value-tag accent">Movement as Medicine</span>
+      <span class="value-tag reed">Bioregional</span>
+      <span class="value-tag water">Intergenerational</span>
+      <span class="value-tag accent">Repair & Maintain</span>
+      <span class="value-tag reed">Community of Practice</span>
+      <span class="value-tag water">Safety Culture</span>
+    </div>
+  </section>
+
+  <!-- 02 THE PRACTICE -->
+  <section>
+    <div class="section-label">02 · The Practice</div>
+    <h2>Movement as <em>inquiry</em> — and medicine</h2>
+
+    <p>Pump foiling is one of the most biomimetic movement practices humans have yet invented. To pump a foil is to move as a manta ray moves, as a dolphin moves — oscillating through a fluid medium, extracting energy from the water itself. It requires presence, sensitivity, and an embodied understanding of fluid dynamics.</p>
+
+    <p>It is also one of the most sustainable fitness practices available to us. Running is wonderful — and for many people it will always be part of life. But running on pavement places real demands on joints that accumulate over time, and around 70% of regular runners experience injuries that interrupt their practice at some point. Not because they're doing something wrong — but because the body eventually asks for variety. For something soft. For water instead of concrete.</p>
+
+    <p>CrossFit and high-intensity training have given millions of people something genuinely valuable: community, challenge, and the deep satisfaction of doing hard things alongside others. The community is the whole point — and that instinct is exactly right. What the body sometimes also needs, alongside intensity, is restoration. Movement that builds without breaking down. A practice that asks for presence rather than maximum effort.</p>
+
+    <p>Pump foiling offers something that sits beautifully alongside both. It is full-body, cardiovascular, and strength-building — and completely low impact. Water carries you. The movement is fluid, oscillating, rhythmic. Joints are mobilised rather than hammered. It runs beside running, complements strength training, or stands entirely on its own. And it can be sustained across decades — not abandoned at fifty when the knees finally say enough.</p>
+
+    <div class="health-grid">
+      <div class="health-stat">
+        <span class="number">Full body</span>
+        <span class="label">Cardiovascular + Strength + Balance</span>
+      </div>
+      <div class="health-stat">
+        <span class="number">Zero impact</span>
+        <span class="label">No joint stress. No pavement. No injury accumulation.</span>
+      </div>
+      <div class="health-stat">
+        <span class="number">Cortisol ↓</span>
+        <span class="label">Rhythmic outdoor movement reduces chronic stress hormones</span>
+      </div>
+      <div class="health-stat">
+        <span class="number">Lifelong</span>
+        <span class="label">A movement practice for decades — not just for the young</span>
+      </div>
+    </div>
+
+    <h3>Stress, restoration — and the quiet of the water</h3>
+    <p>Many of us carry sustained pressure in our bodies — the kind that accumulates over months and years, that exercise alone doesn't always resolve. Rhythmic, bilateral movement in natural environments is one of the most well-documented interventions for nervous system recovery and cortisol regulation. The body finds a pattern; the mind follows.</p>
+    <p>On a foil, this state arrives naturally and completely. The balance required demands full presence, which means the ruminating mind finally gets to rest. It is, in the most literal sense, a moving meditation. And it costs nothing except showing up to the water.</p>
+
+    <div class="pull-quote">
+      "Most people who come to the water for sport discover, after a while, that they came for something else too. A quietness. A sense of being fully in their body. Something that the gym and the busy week couldn't quite reach. That is what we are making a home for."
+      <cite>— Gordon Keay, Founder</cite>
+    </div>
+
+    <!-- ORIGIN STORY -->
+    <div class="origin-note">
+      "This project was born from a breakdown and a recovery. Years of overtraining, chronic illness, and the weight of caring for a seriously ill partner and two young children brought me to a place where pushing harder was no longer possible. The lake taught me what nothing else had — to listen to my body, to find presence instead of performance, to let movement heal rather than deplete. That is what this lab is for — and that is who it is for."
+      <cite>— Gordon Keay, Founder, Genthod, Lac Léman</cite>
+    </div>
+
+    <h3>Safety: learning together, carefully</h3>
+    <p>We must be honest: pump foiling is not without danger. The foil is hard and sharp. Falls happen. The first sessions require respect, care, and proper instruction. The lab takes this with complete seriousness — it is the foundation on which everything else is built. A beginner is never alone on the water. Progression is gradual and guided. Safety protocols are developed collectively and improved continuously. Learning to fall safely comes before learning to fly.</p>
+
+    <div class="safety-grid">
+      <div class="safety-item">
+        <h4>Never Alone</h4>
+        <p>All beginner and early intermediate sessions are accompanied. No one enters the water without a spotter or coach present.</p>
+      </div>
+      <div class="safety-item">
+        <h4>Progressive Pathways</h4>
+        <p>Every member follows a structured learning pathway — understanding the equipment before using it, mastering fundamentals before advancing.</p>
+      </div>
+      <div class="safety-item">
+        <h4>Collective Protocols</h4>
+        <p>Safety practices are developed, tested, and refined by the community itself. Not imposed from above — built from experience and shared openly.</p>
+      </div>
+      <div class="safety-item">
+        <h4>Protective Equipment</h4>
+        <p>We design and test protective gear as part of the lab's R&D programme — biomimetically informed, bioregionally sourced where possible.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 03 PILLARS -->
+  <section>
+    <div class="section-label">03 · Foundations</div>
+    <h2>The five <em>pillars</em></h2>
+
+    <div class="pillars">
+      <div class="pillar">
+        <span class="pillar-icon">🌿</span>
+        <h4>Bioregional Resources</h4>
+        <p>Materials sourced from the living landscape nearby — flax, hemp, plant fibres, bio-resins, waste streams. What grows here shapes what we make here. Partnership with Bcomp Ltd (Fribourg) on natural fibre composites.</p>
+      </div>
+      <div class="pillar">
+        <span class="pillar-icon">🔧</span>
+        <h4>Repair & Maintain Atelier</h4>
+        <p>The workshop is not just a place of creation — it is a place of care. We make foils, but we also learn to repair them, maintain them, and improve them over time. Repair over replace. Every fix is a lesson.</p>
+      </div>
+      <div class="pillar">
+        <span class="pillar-icon">🔄</span>
+        <h4>Circular Material Flows</h4>
+        <p>Nothing leaves as waste. Prototypes become material; offcuts become tools; worn foils return to the workshop. The subscription model keeps equipment in use, in care, and in the community.</p>
+      </div>
+      <div class="pillar">
+        <span class="pillar-icon">🔬</span>
+        <h4>Testing & Innovation</h4>
+        <p>A real R&D centre — iterative design cycles, on-water testing, collaboration with EPFL. The rigour of a research lab, the playfulness of a maker space. Testing is the most fun part.</p>
+      </div>
+      <div class="pillar">
+        <span class="pillar-icon">🤝</span>
+        <h4>Community of Practice</h4>
+        <p>Coaches, riders, shapers, ecologists, students, elders. Knowledge lives in relationships. The community is the lab — and the reason people come back, week after week, year after year.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 04 DESIGN METHODOLOGY -->
+  <section>
+    <div class="section-label">04 · Design Methodology</div>
+    <h2>From lake to hand —<br>the <em>four stages</em></h2>
+
+    <p>At the heart of the lab's design programme is a simple cycle — one that moves from careful observation of the natural world to a finished object shaped by human hands. It is both a research methodology and a making practice, and it can be followed by a curious twelve-year-old or an experienced engineer with equal reward.</p>
+
+    <div class="pillars">
+      <div class="pillar">
+        <span class="pillar-icon">👁</span>
+        <h4>01 · Observe</h4>
+        <p>Study the species of Lac Léman — the grebe, the fera, the pike, the eel. Understand how they move, how they generate lift and thrust, how their bodies are shaped by millions of years of fluid dynamics. Nature has already solved the problem. We begin by looking.</p>
+      </div>
+      <div class="pillar">
+        <span class="pillar-icon">📐</span>
+        <h4>02 · Model</h4>
+        <p>Translate the biological geometry into a digital foil profile. Design the wing shape that embodies what the species taught us. Then 3D print it as a precise prototype core — rapid, repeatable, testable. The machine serves the idea.</p>
+      </div>
+      <div class="pillar">
+        <span class="pillar-icon">🌊</span>
+        <h4>03 · Test</h4>
+        <p>Laminate the printed core in natural fibre and bio-resin. Take it to the lake. Feel what works. Document everything. Refine the shape, print again, test again. Iterate until the geometry sings — until the foil moves the way the species moves.</p>
+      </div>
+      <div class="pillar">
+        <span class="pillar-icon">🪵</span>
+        <h4>04 · Translate</h4>
+        <p>Take the proven geometry and hand-build it in wood and flax — the definitive object. A foil whose shape was inspired by a fish that lives in this lake, built from materials that grew near its shores, shaped by hands in a workshop on its edge. That object has a story a production foil can never tell.</p>
+      </div>
+    </div>
+
+    <div class="pull-quote">
+      "The 3D printer finds the shape. The hands make it real. One is in service of the other — and both are in service of the lake."
+      <cite>— Gordon Keay, Founder</cite>
+    </div>
+
+    <p>Every design the lab develops is published openly — both the digital file for those who want to print and test, and the making guide for those who want to build by hand. Anyone in the world with a 3D printer and some flax cloth can prototype a Léman-inspired foil. Anyone with patience and good tools can build the real thing. The knowledge belongs to everyone.</p>
+  </section>
+  <section>
+    <div class="section-label">04 · The Model</div>
+    <h2>A <em>different</em> way of doing things</h2>
+
+    <p>Most sports equipment models follow the same logic: buy, use, discard, replace. It is expensive, wasteful, and creates barriers to entry that exclude the very people who might benefit most from the practice. We are building something different — something where the equipment, the knowledge, and the community belong to everyone who shows up.</p>
+
+    <div class="subscription-box">
+      <h4>The Collective Subscription Model</h4>
+      <p>Foils belong to the club, not to individuals. Members subscribe to access equipment, participate in workshops, and contribute to the continuous improvement of shared tools.</p>
+      <p>Every repair is a lesson. Every modification is documented. The equipment becomes a living archive of collective learning — improving over time through the hands and experience of the whole community.</p>
+      <p>This lowers the cost barrier to entry, deepens engagement with the tools, and creates a fundamentally different relationship between people and the objects they use. You don't just ride it. You understand it. You care for it. You make it better.</p>
+    </div>
+
+    <p>The ateliers sit at the heart of this model — not just making sessions, but repair evenings, maintenance mornings, open-door workshops where anyone can come and work on anything. Where an elder who has worked wood all their life teaches a teenager how to sand a surface. Where an engineer explains to a child why a dolphin's fin reduces drag. Where strangers become collaborators over something that needed fixing. And then everyone takes it to the lake and tests it together.</p>
+
+    <div class="wave-rule"></div>
+
+    <h3>What happens here, day to day</h3>
+
+    <div class="activities">
+      <div class="activity">
+        <h4>Design & Shape</h4>
+        <p>Hands-on foil shaping using bioregional materials. Biomimetically inspired. Iterative, documented, open-source.</p>
+      </div>
+      <div class="activity">
+        <h4>Repair & Maintain</h4>
+        <p>Weekly atelier sessions focused on care of shared equipment. Every member learns the tools. Repair is practice, not admin.</p>
+      </div>
+      <div class="activity">
+        <h4>Water Sessions</h4>
+        <p>Guided and open sessions on the lake. All levels, all ages. Safety-first culture. Regular community rides at dawn and dusk.</p>
+      </div>
+      <div class="activity">
+        <h4>Biomimicry Study</h4>
+        <p>Observing the Léman's species — grebe, pike, fera, eel — and translating their mechanics directly into prototype designs.</p>
+      </div>
+      <div class="activity">
+        <h4>Coaching & Mentorship</h4>
+        <p>Experienced riders sharing skills across generations. Structured progression pathways. Radical patience. No gatekeeping.</p>
+      </div>
+      <div class="activity">
+        <h4>Wellbeing Sessions</h4>
+        <p>Guided sessions weaving movement practice with breath, presence and nervous system awareness. For those who come to the water for more than sport.</p>
+      </div>
+      <div class="activity">
+        <h4>Open Making Nights</h4>
+        <p>Evenings where the doors open, tools come out, and anyone can work on anything. The community is the curriculum.</p>
+      </div>
+      <div class="activity">
+        <h4>Testing Days</h4>
+        <p>Dedicated days on the water to test new designs, compare iterations, gather data. Rigorous and joyful in equal measure.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 06 DOJO CODE -->
+  <section>
+    <div class="section-label">06 · Principles</div>
+    <h2>How we work — the <em>dojo code</em></h2>
+
+    <ul class="principles">
+      <li>
+        <p><strong>Everyone is welcome.</strong> Age, ability, background and fitness level are not filters. The lab belongs to anyone willing to show up with curiosity and care — the complete beginner as much as the experienced rider.</p>
+      </li>
+      <li>
+        <p><strong>Community is the point.</strong> The foiling is the reason people arrive. The community is the reason they stay. We build relationships alongside foils — and we take both equally seriously.</p>
+      </li>
+      <li>
+        <p><strong>Nature is the senior designer.</strong> We observe before we invent. Every foil geometry begins with a species, a behaviour, a flow pattern in the natural world.</p>
+      </li>
+      <li>
+        <p><strong>The lake is the teacher.</strong> Not a backdrop. Not a venue. The lake is the reason — ecologically, physiologically, spiritually. We go to it with reverence.</p>
+      </li>
+      <li>
+        <p><strong>Repair before replace.</strong> An object repaired with care is more valuable than a new one. The act of repair teaches. The culture of repair sustains.</p>
+      </li>
+      <li>
+        <p><strong>Safety is care, not fear.</strong> We take the risks of this practice seriously — and we build a culture of mutual care that makes it accessible to all. Learning to fall safely is the first lesson.</p>
+      </li>
+      <li>
+        <p><strong>Movement is medicine.</strong> We build for longevity, not performance. The body sustained across decades matters more than the body maximised for one season. Low impact. High joy.</p>
+      </li>
+      <li>
+        <p><strong>Open by default.</strong> Designs are shared. Failures are shared. Knowledge flows out as freely as it flows in. We don't hoard insight.</p>
+      </li>
+      <li>
+        <p><strong>The place shapes the making.</strong> We use what grows nearby. A creative constraint that connects us to landscape and season — and to each other.</p>
+      </li>
+      <li>
+        <p><strong>Joy is serious work.</strong> Delight, play, laughter and fun are not incidental to the lab — they are part of the R&D. If it isn't joyful, we're doing something wrong.</p>
+      </li>
+    </ul>
+  </section>
+
+  <!-- 07 HORIZONS -->
+  <section>
+    <div class="section-label">07 · The Path Forward</div>
+    <h2>Three <em>horizons</em></h2>
+    <p>This lab grows organically, rooted in a location and a community. Here is how we imagine the journey from seed to flourishing ecosystem.</p>
+
+    <div class="horizon">
+      <div class="horizon-phase">
+        <h4>Horizon 1 · Near</h4>
+        <div class="phase-title">The Seed Lab</div>
+        <p>Register the association. Convene the founding circle in Genthod and Versoix. Run the first open water sessions. Begin the repair ateliers. Establish the material palette. Open the conversation with Biomimicry Switzerland and EPFL. Document everything.</p>
+      </div>
+      <div class="horizon-phase">
+        <h4>Horizon 2 · Mid</h4>
+        <div class="phase-title">The Dojo</div>
+        <p>A physical home in Nyon or Rolle — workshop, testing space, lakeside access. Subscription model running. Regular coaching, open ateliers, wellbeing sessions. Visiting designers and biologists. First school partnerships. A self-sustaining community.</p>
+      </div>
+      <div class="horizon-phase">
+        <h4>Horizon 3 · Far</h4>
+        <div class="phase-title">The Living Network</div>
+        <p>Multiple labs, bioregionally distinct, openly connected. A shared design commons. A global community of pump foil practitioners and biomimetic makers. The practice spreads — on every lake, every shoreline — carried by people who found something they didn't know they needed.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 08 OPEN QUESTIONS -->
+  <section>
+    <div class="section-label">08 · Open Questions</div>
+    <h2>What we are still <em>discovering</em></h2>
+    <p>This vision document is deliberately alive. The following questions are generative — they will shape the lab as it grows, answered by the community that builds it.</p>
+
+    <ul class="principles">
+      <li><p><strong>Where is the founding home?</strong> Nyon, Rolle, Morges — or somewhere else on the Léman shore? What commune will welcome a dojo on its waterfront?</p></li>
+      <li><p><strong>Who are the founding circle?</strong> What mix of riders, makers, ecologists, educators and community connectors will form the first cohort at Versoix?</p></li>
+      <li><p><strong>How do we document the wellbeing dimension?</strong> Can we partner with researchers to measure what practitioners are already feeling — the cortisol drop, the nervous system restoration, the emotional release?</p></li>
+      <li><p><strong>What is the governance model?</strong> Community-owned cooperative? Swiss association? What structures best protect openness and longevity for the people who belong to it?</p></li>
+      <li><p><strong>Which species teach us first?</strong> The great crested grebe? The pike? The fera? The eel? What are the master swimmers of the Léman, and what can each one teach a foil designer?</p></li>
+      <li><p><strong>How does safety evolve with the community?</strong> What protective innovations — in equipment, in culture, in protocol — can we develop and share with the wider foiling world?</p></li>
+      <li><p><strong>Who else should be here?</strong> If this speaks to you — if you run, or make things, or love this lake, or simply want to belong to something that matters — the door is open. Come and find us.</p></li>
+    </ul>
+  </section>
+
+</main>
+
+<footer>
+  <div>
+    <div class="footer-name">The <em>Pump Foil</em> Lab</div>
+    <div style="font-family:'Space Mono',monospace; font-size:9px; letter-spacing:0.15em; margin-top:8px; opacity:0.35; text-transform:uppercase;">
+      Genthod · Lac Léman · Biomimetic · Bioregional · Open to All
+    </div>
+  </div>
+  <div class="footer-meta">
+    Vision Document · 2026<br>
+    Genthod, Lac Léman<br>
+    Open for revision
+  </div>
+</footer>
+
+</body>
+</html>

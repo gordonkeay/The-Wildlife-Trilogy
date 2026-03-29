@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Archeus — Synopsis & Skeleton</title>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=Cinzel:wght@400;500&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #1a1410;
+    --deep: #0d1a26;
+    --water: #2e7fa8;
+    --ocean: #1a3d5c;
+    --gold: #c8a84a;
+    --umber: #5c3a1e;
+    --parchment: #f4edd8;
+    --aged: #ede4cc;
+    --cream: #faf6ee;
+    --muted: #777777;
+    --moss: #4a6a3a;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--cream);
+    color: var(--ink);
+    font-family: 'EB Garamond', Georgia, serif;
+    font-size: 18px;
+    line-height: 1.85;
+  }
+
+  .cover {
+    min-height: 55vh;
+    background: var(--deep);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 80px 10vw;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .cover::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 80% 50% at 50% 100%, rgba(46,127,168,0.25) 0%, transparent 60%),
+      radial-gradient(ellipse 40% 40% at 20% 20%, rgba(200,168,74,0.04) 0%, transparent 50%);
+    pointer-events: none;
+  }
+
+  .cover-inner { position: relative; z-index: 1; }
+
+  .cover-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--gold);
+    opacity: 0.6;
+    margin-bottom: 24px;
+  }
+
+  .cover-title {
+    font-family: 'Cinzel', serif;
+    font-size: clamp(3rem, 10vw, 6.5rem);
+    font-weight: 400;
+    color: var(--parchment);
+    letter-spacing: 0.2em;
+    line-height: 1;
+    margin-bottom: 16px;
+  }
+
+  .cover-subtitle {
+    font-family: 'EB Garamond', serif;
+    font-size: clamp(1rem, 2.5vw, 1.4rem);
+    font-style: italic;
+    color: rgba(244,237,216,0.45);
+    margin-bottom: 40px;
+  }
+
+  .cover-rule {
+    width: 60px;
+    height: 1px;
+    background: var(--gold);
+    opacity: 0.35;
+    margin: 0 auto 32px;
+  }
+
+  .cover-epigraph {
+    font-family: 'EB Garamond', serif;
+    font-size: 0.95rem;
+    font-style: italic;
+    color: rgba(244,237,216,0.3);
+    max-width: 440px;
+    line-height: 1.8;
+  }
+
+  .cover-epigraph cite {
+    display: block;
+    margin-top: 10px;
+    font-style: normal;
+    font-family: 'DM Mono', monospace;
+    font-size: 8px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    opacity: 0.6;
+  }
+
+  .page {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 60px 8vw;
+  }
+
+  .section {
+    margin-bottom: 64px;
+  }
+
+  .section-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--water);
+    margin-bottom: 16px;
+    display: block;
+  }
+
+  .section-title {
+    font-family: 'Cinzel', serif;
+    font-size: 1.6rem;
+    font-weight: 400;
+    color: var(--deep);
+    letter-spacing: 0.06em;
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid rgba(13,26,38,0.12);
+  }
+
+  .prose p {
+    margin-bottom: 20px;
+    line-height: 1.95;
+    color: var(--ink);
+  }
+
+  .key-line {
+    background: var(--aged);
+    border-left: 3px solid var(--gold);
+    padding: 20px 28px;
+    margin: 32px 0;
+    font-style: italic;
+    font-size: 1.05rem;
+    color: var(--umber);
+    line-height: 1.75;
+  }
+
+  .honest-note {
+    background: rgba(46,127,168,0.05);
+    border: 1px solid rgba(46,127,168,0.15);
+    padding: 24px 28px;
+    margin: 32px 0;
+  }
+
+  .honest-note p {
+    font-size: 0.92rem;
+    color: var(--ocean);
+    line-height: 1.8;
+    margin-bottom: 12px;
+  }
+
+  .honest-note p:last-child { margin-bottom: 0; }
+
+  .status-bar {
+    display: flex;
+    gap: 16px;
+    margin: 32px 0;
+    flex-wrap: wrap;
+  }
+
+  .status-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .status-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .dot-written { background: #2e7fa8; }
+  .dot-voice { background: #c8a84a; }
+  .dot-rewrite { background: #c4603a; }
+
+  .chapter-block {
+    background: white;
+    border: 1px solid rgba(13,26,38,0.08);
+    border-left: 4px solid var(--water);
+    padding: 24px 28px;
+    margin-bottom: 20px;
+    position: relative;
+  }
+
+  .chapter-block.voice-needed {
+    border-left-color: var(--gold);
+  }
+
+  .chapter-block.rewrite {
+    border-left-color: #c4603a;
+  }
+
+  .chapter-block.missing {
+    border-left-color: #cccccc;
+    opacity: 0.75;
+  }
+
+  .chapter-status {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    font-family: 'DM Mono', monospace;
+    font-size: 7px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 2px;
+  }
+
+  .status-written { background: rgba(46,127,168,0.1); color: var(--water); }
+  .status-voice { background: rgba(200,168,74,0.1); color: #8a6a1e; }
+  .status-rewrite { background: rgba(196,96,58,0.1); color: #8a3a1e; }
+  .status-missing { background: rgba(150,150,150,0.1); color: #999; }
+
+  .chapter-number {
+    font-family: 'DM Mono', monospace;
+    font-size: 8px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 8px;
+    display: block;
+  }
+
+  .chapter-title {
+    font-family: 'Cinzel', serif;
+    font-size: 1.1rem;
+    font-weight: 400;
+    color: var(--deep);
+    letter-spacing: 0.04em;
+    margin-bottom: 8px;
+    line-height: 1.3;
+    padding-right: 100px;
+  }
+
+  .chapter-subtitle {
+    font-size: 0.9rem;
+    font-style: italic;
+    color: var(--muted);
+    margin-bottom: 12px;
+  }
+
+  .chapter-body {
+    font-size: 0.92rem;
+    color: #1a2a38;
+    line-height: 1.8;
+    margin-bottom: 12px;
+  }
+
+  .chapter-note {
+    font-size: 0.85rem;
+    color: var(--water);
+    font-style: italic;
+    border-top: 1px solid rgba(46,127,168,0.12);
+    padding-top: 10px;
+    margin-top: 10px;
+  }
+
+  .chapter-quote {
+    font-style: italic;
+    font-size: 0.88rem;
+    color: var(--umber);
+    border-left: 2px solid rgba(92,58,30,0.2);
+    padding-left: 12px;
+    margin-top: 10px;
+    line-height: 1.65;
+  }
+
+  .divider {
+    text-align: center;
+    color: var(--gold);
+    opacity: 0.4;
+    margin: 48px 0;
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.4em;
+  }
+
+  .closing-block {
+    background: var(--deep);
+    padding: 48px;
+    text-align: center;
+    margin: 48px 0;
+  }
+
+  .closing-block p {
+    font-family: 'EB Garamond', serif;
+    font-size: 1.1rem;
+    font-style: italic;
+    color: var(--parchment);
+    line-height: 2.1;
+  }
+
+  .closing-block cite {
+    display: block;
+    margin-top: 20px;
+    font-family: 'DM Mono', monospace;
+    font-size: 8px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(244,237,216,0.25);
+    font-style: normal;
+  }
+
+  .three-col {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin: 32px 0;
+  }
+
+  .col-box {
+    background: white;
+    border: 1px solid rgba(13,26,38,0.08);
+    padding: 16px;
+    text-align: center;
+  }
+
+  .col-box.present { border-top: 3px solid var(--water); }
+  .col-box.past { border-top: 3px solid var(--gold); }
+  .col-box.universal { border-top: 3px solid var(--moss); }
+
+  .col-name {
+    font-family: 'Cinzel', serif;
+    font-size: 0.82rem;
+    color: var(--deep);
+    letter-spacing: 0.04em;
+    margin-bottom: 8px;
+  }
+
+  .col-desc {
+    font-size: 0.78rem;
+    color: var(--muted);
+    font-style: italic;
+    line-height: 1.55;
+  }
+
+  footer {
+    background: var(--deep);
+    padding: 32px 8vw;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 60px;
+  }
+
+  .footer-title {
+    font-family: 'Cinzel', serif;
+    font-size: 0.85rem;
+    color: rgba(244,237,216,0.3);
+    letter-spacing: 0.1em;
+  }
+
+  .footer-meta {
+    font-family: 'DM Mono', monospace;
+    font-size: 8px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(244,237,216,0.15);
+    text-align: right;
+    line-height: 2;
+  }
+
+  @media (max-width: 600px) {
+    .three-col { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<section class="cover">
+  <div class="cover-inner">
+    <div class="cover-label">Book One of the Wildlife Trilogy</div>
+    <h1 class="cover-title">ARCHEUS</h1>
+    <p class="cover-subtitle">A Journal of the Lake & What It Taught Me</p>
+    <div class="cover-rule"></div>
+    <div class="cover-epigraph">
+      "The art of healing comes from nature, not from the physician. Therefore the physician must start from nature, with an open mind."
+      <cite>— Paracelsus, 1493–1541</cite>
+    </div>
+  </div>
+</section>
+
+<div class="page">
+
+  <!-- SYNOPSIS -->
+  <div class="section">
+    <span class="section-label">The Book</span>
+    <h2 class="section-title">Synopsis</h2>
+
+    <div class="prose">
+      <p>Archeus is a philosophical novel in the form of a journal. A man — known only as Archeus — comes to the shore of Lac Léman broken, depleted, and in need of something he cannot name. He begins to keep a journal. Over the course of weeks he encounters a series of teachers: a grebe that reads water with complete attention, an eel that moves through current with perfect efficiency, a mysterious figure on the water who appears to be flying, a Paracelsus found on a forgotten shelf, a boathouse community of makers and healers and dreamers. Through these encounters — and through the practice of pump foiling that becomes the laboratory for all of it — he begins to understand what the Archeus actually is: the inner architect, the vital healing intelligence that has always known how to restore what has been broken, if only we stop interfering with it.</p>
+
+      <p>The novel is structured as a journal with three temporal layers moving simultaneously. The present — Archeus on the shore, at the dock, in the boathouse, writing by evening light. The past — flashbacks to the Pacific years, the reef, the nudibranch, the candle practice given by a fortune teller in Venice Beach. And the universal — the Paracelsus epigraphs that open each chapter, which are invented in his spirit rather than transcribed from his work, speaking across five centuries to the questions the journal is asking.</p>
+
+      <p>The novel ends not with arrival but with opening. The boathouse is becoming something. The foundation is being called into being. The lake is still teaching. And the reader — whoever recognises the frequency — is invited to the shore.</p>
+    </div>
+
+    <div class="key-line">
+      "He who knows nothing, loves nothing. He who understands also loves, notices, sees.<br>
+      The more knowledge is inherent in a thing, the greater the love.<br><br>
+      <em>The lake is the teacher. We are all still the students.</em>"
+    </div>
+  </div>
+
+  <div class="divider">· · ·</div>
+
+  <!-- THREE LAYERS -->
+  <div class="section">
+    <span class="section-label">Structure</span>
+    <h2 class="section-title">Three Temporal Layers</h2>
+
+    <div class="prose">
+      <p>Archeus moves between three registers without announcing the shifts. The reader learns to feel the difference between them the way the grebe learns to feel the difference between surface and depth.</p>
+    </div>
+
+    <div class="three-col">
+      <div class="col-box present">
+        <div class="col-name">The Present</div>
+        <div class="col-desc">Archeus at the lake. The dawn walks. The grebe. The dock. The boathouse. The journal entries written in real time. The man in the process of learning.</div>
+      </div>
+      <div class="col-box past">
+        <div class="col-name">The Past</div>
+        <div class="col-desc">The Pacific years. Venice Beach. The reef. The nudibranch. The candle practice. The retreat. The flashbacks that arrive when the lake pulls them up.</div>
+      </div>
+      <div class="col-box universal">
+        <div class="col-name">The Universal</div>
+        <div class="col-desc">Paracelsus. The epigraphs opening each chapter. The 500 year old voice speaking across time to the exact question being asked. Invented in his spirit.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider">· · ·</div>
+
+  <!-- HONEST ASSESSMENT -->
+  <div class="honest-note">
+    <p><strong>The honest picture of where Archeus stands.</strong> This is the most complete of the three books. A full draft exists — approximately 23,000 words across seventeen chapters. The architecture is strong. The Paracelsus thread works. The nature observation passages are already in your voice. The boathouse community is alive.</p>
+    <p>What it needs is your true voice breathed into it chapter by chapter. The current draft was built collaboratively with Claude and reads, in places, as elegant construction rather than lived experience. The journal asides and observation boxes are often the most alive sections — they carry your specific sensory intelligence. The main journal entries sometimes move too smoothly, too polished, too far from the grit that makes Wildlife and Paramanta unmistakably yours.</p>
+    <p>The work is not rewriting from scratch. It is moving through each chapter and asking — where is my actual voice in here? Where do I recognise myself? Then finding the raw material that belongs there and doing what we did with Paramanta — building from the inside out using your own words as the ore.</p>
+  </div>
+
+  <div class="divider">· · ·</div>
+
+  <!-- STATUS KEY -->
+  <div class="status-bar">
+    <div class="status-item"><div class="status-dot dot-written"></div>Written and working</div>
+    <div class="status-item"><div class="status-dot dot-voice"></div>Written — needs your voice</div>
+    <div class="status-item"><div class="status-dot dot-rewrite"></div>Needs significant rewrite</div>
+  </div>
+
+  <!-- CHAPTERS -->
+  <div class="section">
+    <span class="section-label">The Chapters</span>
+    <h2 class="section-title">Skeleton Outline</h2>
+
+    <!-- Before Everything I -->
+    <div class="chapter-block">
+      <span class="chapter-status status-written">Working</span>
+      <span class="chapter-number">Before Everything — I</span>
+      <div class="chapter-title">The Candle</div>
+      <div class="chapter-subtitle">Venice Beach — the fortune teller — the practice that started everything</div>
+      <div class="chapter-body">A young man on a crowded boulevard in California. A fortune teller who sees something in his palm and offers not a prophecy but a practice. A candle and a single instruction: find the small things. Two months of nightly gratitude by firelight on a Pacific island. The origin of the dream-time vigils twenty years before he understood what he was building. The candle was first.</div>
+      <div class="chapter-quote">"She gave me the evening practice. But the evening practice gave me the days."</div>
+      <div class="chapter-note">Already written and working. The connection to the dream-time diaries needs to be made explicit — this is the same practice Gordon has been doing all along.</div>
+    </div>
+
+    <!-- Before Everything II -->
+    <div class="chapter-block">
+      <span class="chapter-status status-written">Working</span>
+      <span class="chapter-number">Before Everything — II</span>
+      <div class="chapter-title">The Nudibranch</div>
+      <div class="chapter-subtitle">The Pacific reef — eighteen metres — the teacher that taught attention</div>
+      <div class="chapter-body">The reef and its hierarchy of wonder — from the manta and the eagle ray and the humphead wrasse down to the three centimetre sea slug with lungs on the outside. The lesson that the big things take your attention but the small things require you to give it. The shift from conservationist moving too fast to diver learning to stop. The hour spent at one section of reef wall counting thirty species. The nudibranch as the origin of the lens.</div>
+      <div class="chapter-quote">"The things we pay attention to become the beauty we care most about."</div>
+      <div class="chapter-note">Strong as written. The connection to Gordon's own nudibranch experience in the underworld passage needs threading through.</div>
+    </div>
+
+    <!-- Before Everything III -->
+    <div class="chapter-block voice-needed">
+      <span class="chapter-status status-voice">Needs Voice</span>
+      <span class="chapter-number">Before Everything — III</span>
+      <div class="chapter-title">Solve et Coagula</div>
+      <div class="chapter-subtitle">The retreat — the dissolution — the body releasing what the mind refused</div>
+      <div class="chapter-body">Six days of silence on the shore of Lac Léman. Coming broken without admitting the breaking. On the sixth day — something giving way. Energy moving through the body like current through water. The trembling, the vibration, the releases that felt like relief. The body storing what the mind could not process. The fascial matrix as archive of everything carried without metabolising. The fire made by hand from flint and grass. The lake seen properly for the first time. Tomorrow he will walk to the shore.</div>
+      <div class="chapter-quote">"Solve et coagula. You cannot begin until you have first come apart."</div>
+      <div class="chapter-note">This chapter needs Gordon's voice most urgently. The retreat experience in the current draft is well constructed but generic. The raw material from the dream-time diaries — the vigil, the body's releases, the stored grief — belongs here. This is where the personal breaks through into the universal.</div>
+    </div>
+
+    <!-- Prologue -->
+    <div class="chapter-block">
+      <span class="chapter-status status-written">Working</span>
+      <span class="chapter-number">Prologue</span>
+      <div class="chapter-title">The First Entry</div>
+      <div class="chapter-subtitle">Archeus begins his journal — the grebe is the reason</div>
+      <div class="chapter-body">The man introduces himself — Archeus, a man who pushed too hard and arrived at a place where pushing was no longer possible. He is starting this journal because something happened at the lake that he does not want to lose. He watched a bird dive. That is all. And something in him went very quiet. The lake, it seems, had other ideas.</div>
+      <div class="chapter-quote">"I came to the lake to rest. I did not expect to learn anything here. The lake had other ideas."</div>
+      <div class="chapter-note">Clean and strong. The opening is properly yours — it has the right quality of restraint. Keep as is.</div>
+    </div>
+
+    <!-- Chapter One -->
+    <div class="chapter-block voice-needed">
+      <span class="chapter-status status-voice">Needs Voice</span>
+      <span class="chapter-number">Chapter One</span>
+      <div class="chapter-title">The Grebe</div>
+      <div class="chapter-subtitle">The first teacher — reading water with complete attention</div>
+      <div class="chapter-body">The dawn walks before light. The lake in early morning as a different substance. The grebe found on the third morning — its quality of zero waste, the moment before the dive, the stillness that becomes more still, the reading of the water beneath. The finding of the Paracelsus on the lowest shelf of the study that afternoon. The passage about the Book of Nature written in the language of the things themselves. The grebe and Paracelsus teaching the same thing from opposite ends of five centuries.</div>
+      <div class="chapter-quote">"The grebe reads it fluently. I am still learning the alphabet."</div>
+      <div class="chapter-note">The dawn observation passages are extraordinary and already in your voice — the colours of the lake, the birdsong, the edges as the most interesting places. The main journal entries need more of this physical specificity throughout. The Paracelsus discovery works well. Expand the grebe's teaching — what does the grebe know about the threshold between two worlds?</div>
+    </div>
+
+    <!-- Chapter Two -->
+    <div class="chapter-block voice-needed">
+      <span class="chapter-status status-voice">Needs Voice</span>
+      <span class="chapter-number">Chapter Two</span>
+      <div class="chapter-title">The Eel</div>
+      <div class="chapter-subtitle">Undulation — effort distributed through the whole</div>
+      <div class="chapter-body">The eel seen at the edge of the reeds. The quality of its movement — not the thrust of something pushing through resistance but the wave that finds the path of least resistance through every medium it encounters simultaneously. Paracelsus on the body's wisdom. The eel as the physical demonstration of what the Archeus is — the intelligence that distributes effort perfectly, that wastes nothing, that moves through the world by reading it rather than fighting it. The lesson that will arrive again in the foil and the pump.</div>
+      <div class="chapter-quote">"The eel taught me to feel. The most powerful force travels not through the straightest line but through the most intelligent curve."</div>
+      <div class="chapter-note">This chapter exists in the closing entry summary but needs its full scene. The eel is one of the central teachers. Write the encounter in full — where you were standing, what the light was doing, how long you watched. The physical specificity of the eel's movement needs the same quality of attention as the grebe observation.</div>
+    </div>
+
+    <!-- Chapter Three -->
+    <div class="chapter-block">
+      <span class="chapter-status status-written">Working</span>
+      <span class="chapter-number">Chapter Three</span>
+      <div class="chapter-title">The Figure on the Water</div>
+      <div class="chapter-subtitle">The first sighting — the man who appeared to be flying</div>
+      <div class="chapter-body">Walking the shore in the golden afternoon light. A figure on the open water — standing, moving, flying. The attempt to parse what he is seeing. Not paddling, not sailing, not propelled by anything external. The field observation recorded immediately at the shore with cold hands. The Paracelsus falling open to the passage about the art of allowing. The decision: I am going to find him. Not to ask him to teach me. First, to understand what it is I watched him do. To read it before I try to speak it.</div>
+      <div class="chapter-quote">"This is what it looks like when a human being learns to read the Book of Nature fluently."</div>
+      <div class="chapter-note">One of the strongest chapters. The field observation box is excellent — precise, physical, alive. The journal aside at the end is too long and slightly over-explains. Trust the image. Cut the explanation by half and let the recognition land without commentary.</div>
+    </div>
+
+    <!-- Chapter Four -->
+    <div class="chapter-block voice-needed">
+      <span class="chapter-status status-voice">Needs Voice</span>
+      <span class="chapter-number">Chapter Four</span>
+      <div class="chapter-title">The Man at the Shore</div>
+      <div class="chapter-subtitle">The meeting — the teacher found — the first conversation</div>
+      <div class="chapter-body">Three mornings at the headland finding nothing. The fourth morning — the man crouched at the shore working on the foil. The Paracelsus caught by a gust and caught by the man's hand. The first exchange — different century, same water. The long conversation about the practice — what effortlessness actually means, what it costs, what the body learns that the mind cannot think. The instruction to leave the Paracelsus on the shore when you get in the water. Tomorrow he will go early.</div>
+      <div class="chapter-quote">"The effort becomes invisible. Even to yourself. That is what you are working toward — the moment when you stop feeling the work and start feeling the water."</div>
+      <div class="chapter-note">The dialogue works but the man needs more of your specific sensory vocabulary. His face, his hands on the foil surface, the quality of his silence. The instruction to leave the Paracelsus on the shore is the chapter's best moment — let it breathe more.</div>
+    </div>
+
+    <!-- Chapter Five -->
+    <div class="chapter-block voice-needed">
+      <span class="chapter-status status-voice">Needs Voice</span>
+      <span class="chapter-number">Chapter Five</span>
+      <div class="chapter-title">On cherche le glisse</div>
+      <div class="chapter-subtitle">The thousand falls — the practice itself</div>
+      <div class="chapter-body">Weeks five through eight at the dock. One thousand falls honestly reported. The dock start described in full — drop, rebound, jump, landing like a cat. The instruction that arrives on the thirtieth day: you go where you look. Look down, go down. Lift the head, open to the world in front, trust the thousand repetitions. The moment when the ego is put down and the Archeus permitted to do what it always knew. Three seconds of glide. The mantra arrives: on cherche le glisse. Not the destination. The searching.</div>
+      <div class="chapter-quote">"I had been fighting my own Archeus for twenty-three days. I finally stepped aside. And it knew exactly what to do."</div>
+      <div class="chapter-note">This chapter has the strongest connection to your actual writing — the dock start passages from the journal are almost verbatim in places. This is where the book most clearly becomes yours. Needs the rainy morning sessions, the wind on the chop, the laughing alone on the water. The worm analogy from the dream-time diaries — learning the body's intelligence from inside — belongs here.</div>
+    </div>
+
+    <!-- Chapter Six — MISSING -->
+    <div class="chapter-block missing">
+      <span class="chapter-status status-missing">Missing</span>
+      <span class="chapter-number">Chapter Six</span>
+      <div class="chapter-title">The Quagga</div>
+      <div class="chapter-subtitle">The wound that becomes the remedy — solve et coagula made literal</div>
+      <div class="chapter-body">The quagga mussel as the central alchemical image of the whole novel. The invasive species consuming the lake from inside. The quagga beach on the shore at Lac Léman — shells crunching underfoot like the echo of the British Empire's peanut shell beaches. The research into using quagga shell as a building material — the wound of the lake becoming the material from which the instruments of healing are made. The man revealing that the finishing compound for the wing will contain a fraction of mussel shell powder. The poison in its proper dose becoming part of the remedy.</div>
+      <div class="chapter-quote">"The quagga mussel coating the lake floor. The invasive creature consuming this water. And the question — can the wound become the material for the cure?"</div>
+      <div class="chapter-note">This chapter is referenced but never fully written. It is the most explicitly alchemical moment in the whole book and needs to be developed in full. The connection to Gordon's own wound becoming his material is the deepest thread of the whole trilogy. The quagga beach passage from the dream-time diaries belongs here.</div>
+    </div>
+
+    <!-- Chapter Seven -->
+    <div class="chapter-block voice-needed">
+      <span class="chapter-status status-voice">Needs Voice</span>
+      <span class="chapter-number">Chapter Seven</span>
+      <div class="chapter-title">The Boathouse</div>
+      <div class="chapter-subtitle">The workshop — the wing blank — the knowledge in the hands</div>
+      <div class="chapter-body">A rainy day. The man at the door: come, there is nothing to learn on the water today, today we go to the workshop. The boathouse among the larch and ash — linseed oil, timber shavings, the smell of something being made. The wing blank on the trestle — pale wood, roughly shaped, the form implied rather than imposed. Sandpaper and the instruction: always with the grain, slowly — the water will feel everything. The particular aching of investment rather than extraction. The recognition of a space organised entirely around making.</div>
+      <div class="chapter-quote">"The work changes the worker. This is the great secret. This is what the alchemists were always trying to say."</div>
+      <div class="chapter-note">The boathouse chapter identified earlier as most urgently needing your voice. The workshop observation box is already excellent. What's missing is your specific making history — the bread, the fabric at Schumacher, the foil you planned with basalt and flax. The man at the workbench needs more of your Knock on Wood studio sensibility. This is where the Biomimetic Pump Foil Lab concept belongs in fictional form.</div>
+    </div>
+
+    <!-- Chapter Eight -->
+    <div class="chapter-block voice-needed">
+      <span class="chapter-status status-voice">Needs Voice</span>
+      <span class="chapter-number">Chapter Eight</span>
+      <div class="chapter-title">The Bread</div>
+      <div class="chapter-subtitle">Alchemy in the kitchen — solve et coagula made edible</div>
+      <div class="chapter-body">An early morning. The sourdough starter fed and set to prove. Paracelsus's tria prima applied to bread — sulphur the wild yeast, mercury the water, salt the flour. The fire as the fourth force. The transformation that goes both ways: the bread becomes bread and the baker becomes something they could not have become without the making. The practice of gathering small joys through the day to bring to the flame at night. The bread making me as I make it. The cosmic dance made edible.</div>
+      <div class="chapter-quote">"The bread makes me as I bake it. We dance in a circularity. This is alchemy. Not the making of gold from lead — the making of a self from the faithful application of attention, heat, and time."</div>
+      <div class="chapter-note">This chapter already contains your voice most fully — the bread essay is explicitly yours, barely disguised. Expand it with the specific sensory experience of baking gluten free bread for a family with allergies, the particular satisfaction of feeding people who need careful feeding. The connection between bread and the foil wing — both shaped by hand, both requiring the right conditions to rise — is the chapter's philosophical spine.</div>
+    </div>
+
+    <!-- Chapter Nine -->
+    <div class="chapter-block rewrite">
+      <span class="chapter-status status-rewrite">Needs Rewrite</span>
+      <span class="chapter-number">Chapter Nine</span>
+      <div class="chapter-title">The Others</div>
+      <div class="chapter-subtitle">The community gathering — the whole truth distributed</div>
+      <div class="chapter-body">The people arriving without announcement at the shore and the boathouse. The woman who had been ill. The boy on his bicycle before school. The cabinet maker with forty years of hand knowledge who arrives and sits down and begins working without introduction. The man's teaching: the whole truth is distributed. No single source holds it. You have to move through the world to find it. The boy's question: what do you become? The man's answer: come back tomorrow and we will find out together.</div>
+      <div class="chapter-quote">"This is how it was always supposed to happen. Many people, each bringing what they have, each receiving what they need. The knowledge doesn't live in any of us. It lives between us."</div>
+      <div class="chapter-note">The gathering is beautifully conceived but the characters are too archetypal — the woman, the boy, the cabinet maker are types rather than people. They need specific details, specific voices, specific knowledge only they carry. Think of Darrell Tatum and Bob the panel beater — people remembered with total specificity. Give these people that quality. Who are they really?</div>
+    </div>
+
+    <!-- Chapter Ten -->
+    <div class="chapter-block voice-needed">
+      <span class="chapter-status status-voice">Needs Voice</span>
+      <span class="chapter-number">Chapter Ten</span>
+      <div class="chapter-title">The Completed Wing</div>
+      <div class="chapter-subtitle">The making finished — the thing that looks like it belongs to a creature</div>
+      <div class="chapter-body">Thursday evening, fading light, all present. The wing finished. The woman picks it up and says — it looks like a wing. Meaning: something evolved rather than made. The hours visible in it — the cabinet maker's corrections, the boy's careful questions, the collective learning made physical. The man's revelation that the finishing compound contains a fraction of quagga shell. The poison become part of the remedy. The meal together at the long table. The wing present among them like a fifth member.</div>
+      <div class="chapter-quote">"It has been made more itself by the removal of what was not essential."</div>
+      <div class="chapter-note">The completion scene is strong. The quagga shell revelation is the best moment in the chapter — but it needs more weight. This is the solve et coagula of the whole novel made physical. Let it breathe. The meal together is slightly underwritten — this is the chapter's emotional peak and needs more sensory presence.</div>
+    </div>
+
+    <!-- Chapter Eleven — MISSING -->
+    <div class="chapter-block missing">
+      <span class="chapter-status status-missing">Missing</span>
+      <span class="chapter-number">Chapter Eleven</span>
+      <div class="chapter-title">The First Flight</div>
+      <div class="chapter-subtitle">The wing on the water — what it felt like</div>
+      <div class="chapter-body">The wing taken to the water for the first time. The man watching from the shore. The moment when the handmade thing meets the element it was made for — and answers. Not a perfect flight necessarily. But the confirmation that what was made in the workshop translates to the water. The proof that the work was real. The wing that looked like a creature on the bench is now doing what creatures do. This chapter is referenced but never fully written — it needs to exist as its own full scene.</div>
+      <div class="chapter-note">This chapter is mentioned in passing but never written. It is structurally essential — the workshop section needs its payoff. Write the first flight in full. Use the breach passage from the dream-time diaries as the emotional template — the breach is the same moment rendered mythically. This is the realistic version.</div>
+    </div>
+
+    <!-- Chapters 12-16 — needs development note -->
+    <div class="chapter-block missing">
+      <span class="chapter-status status-missing">To Develop</span>
+      <span class="chapter-number">Chapters Twelve through Sixteen</span>
+      <div class="chapter-title">The Middle Chapters</div>
+      <div class="chapter-subtitle">Bali, the mangrove, the ecological grief, the inner revolution</div>
+      <div class="chapter-body">The APF ideas log references chapters that exist in concept but need development. The Bali chapter — the gamelan dancers, the pattern, the beat that arrives in the underworld passage. The mangrove passage — connection to the marine conservation work, the ecosystem thinking. The ecological grief chapter — the weight of caring too much, the reef bleaching, the quagga invasion, the glaciers. And the inner revolution chapter — the practice as medicine for the armoured self, the dock start as the antidote to the life of pushing.</div>
+      <div class="chapter-note">These chapters are named in the APF ideas log and the closing entry but not yet fully developed. The dream-time diaries contain the raw material for all of them. The Bali gamelan is in the 26th March entry. The ecological grief is in the 10th and 11th March journal entries. The inner revolution is the philosophical heart of the whole project. Develop these as the voice work on the existing chapters reveals what's needed.</div>
+    </div>
+
+    <!-- Closing Entry -->
+    <div class="chapter-block">
+      <span class="chapter-status status-written">Working</span>
+      <span class="chapter-number">Closing Entry</span>
+      <div class="chapter-title">What the Lake Taught</div>
+      <div class="chapter-subtitle">The summary — the foundation — the invitation</div>
+      <div class="chapter-body">Written at the desk by the window. The lake doing what it does in the evening. The summaries of what each teacher gave — the grebe taught seeing, the eel taught feeling, the man on the water taught wanting something again, the workshop taught that knowledge lives in the hands, the others taught that the whole truth is distributed. And Paracelsus — found on a forgotten shelf — taught that the body's inner intelligence knows how to heal if only we stop interfering. The boathouse becoming something. The foundation being called into being. Come and find us.</div>
+      <div class="chapter-quote">"The lake is the teacher. We are — all of us, still — the students."</div>
+      <div class="chapter-note">The closing entry is one of the strongest sections in the whole draft. The final paragraph — the boathouse, the smell of linseed oil, the figure on the water — is already exactly right. The journal aside at the very end needs to be the last thing the reader reads and it currently runs slightly long. Find the last sentence and end there.</div>
+    </div>
+
+    <!-- Author's Note -->
+    <div class="chapter-block voice-needed">
+      <span class="chapter-status status-voice">Needs Voice</span>
+      <span class="chapter-number">Author's Note</span>
+      <div class="chapter-title">From the Author</div>
+      <div class="chapter-subtitle">The voice behind the voice</div>
+      <div class="chapter-body">The note that sits after the novel and reveals the man behind Archeus. The current draft has a beautiful note — I didn't write this book, I lived it. These are not my ideas, they are as old as time, they just got expressed through my voice this time. The sensitivity as strength. The instrument that was always tuned, just too much distortion. If any of this resonates — if you have felt the weight of caring too much, of pushing too hard, of standing on a dock in the cold wondering if this time will be different — then this was lived for you.</div>
+      <div class="chapter-quote">"The living came first. The writing simply followed."</div>
+      <div class="chapter-note">The note is already close to perfect in places. What it needs is the one thing you now know that you didn't when it was first written — who it's actually for. The eight year old by the trunk. The sixteen year old in Stoke. The man on the dock wondering if this time will be different. Name them. Even obliquely. The note should make the reader feel seen before they even begin the book.</div>
+    </div>
+
+  </div>
+
+  <div class="divider">· · ·</div>
+
+  <!-- WHAT THE VOICE WORK LOOKS LIKE -->
+  <div class="section">
+    <span class="section-label">The Work Ahead</span>
+    <h2 class="section-title">How to Breathe Your Voice Into It</h2>
+
+    <div class="prose">
+      <p>The method is the same as we used for Paramanta. You go through each chapter and ask three questions. Where do I recognise myself? Where does it sound like someone else's idea of me? Where is the specific sensory truth missing?</p>
+
+      <p>Then you go to the raw material — the dream-time diaries, the voice recordings, the journal entries — and find the passages that belong there. The quagga beach crunching underfoot. The pollen that started attacking at thirty and hasn't stopped. The postman at 4am in the dead of winter. The specific smell of the boathouse. The way the lake looks at that exact shade between grey and silver before the warmth arrives.</p>
+
+      <p>The architecture doesn't need to change. The Paracelsus thread works. The three temporal layers work. The chapter titles are right. What needs to change is the texture — the specific, irreplaceable, only-Gordon sensory intelligence that makes the difference between a beautifully constructed journal and a living one.</p>
+
+      <p>Start with the Boathouse chapter. That's the one you identified as most urgently needing your voice. One chapter at a time. The same way the wing was made — slowly, with the grain, the water feeling everything.</p>
+    </div>
+  </div>
+
+  <div class="divider">· · ·</div>
+
+  <!-- CLOSING -->
+  <div class="closing-block">
+    <p>
+      Wildlife is the grit.<br>
+      Archeus is the nacre.<br>
+      Paramanta is the pearl.<br><br>
+      <em>The lake is the teacher.<br>
+      The boathouse is open.<br>
+      The Paracelsus is on the shelf.<br>
+      The foil is in the water.<br><br>
+      Come and find us.</em>
+    </p>
+    <cite>Gordon Keay · Genthod · Lac Léman · 2026</cite>
+  </div>
+
+</div>
+
+<footer>
+  <div class="footer-title">Archeus — A Journal of the Lake</div>
+  <div class="footer-meta">
+    Synopsis & Skeleton Outline · Draft 1<br>
+    Archeus Planare Foundation · 2026
+  </div>
+</footer>
+
+</body>
+</html>

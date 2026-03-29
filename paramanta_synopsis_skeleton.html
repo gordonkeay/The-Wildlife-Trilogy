@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Paramanta — Synopsis & Skeleton</title>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=Cinzel:wght@400;500&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #1a1410;
+    --deep: #0d2433;
+    --ocean: #1a3d5c;
+    --lake: #2e7fa8;
+    --gold: #c8a84a;
+    --parchment: #f4edd8;
+    --aged: #ede4cc;
+    --cream: #faf6ee;
+    --muted: #777777;
+    --verdigris: #4a8a6a;
+    --coral: #c4603a;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--cream);
+    color: var(--ink);
+    font-family: 'EB Garamond', Georgia, serif;
+    font-size: 18px;
+    line-height: 1.85;
+  }
+
+  .cover {
+    min-height: 50vh;
+    background: var(--deep);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 80px 10vw;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .cover::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 80% 50% at 50% 100%, rgba(46,127,168,0.3) 0%, transparent 60%),
+      radial-gradient(ellipse 40% 40% at 20% 30%, rgba(200,168,74,0.05) 0%, transparent 50%);
+    pointer-events: none;
+  }
+
+  .cover-inner { position: relative; z-index: 1; }
+
+  .cover-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--gold);
+    opacity: 0.6;
+    margin-bottom: 24px;
+  }
+
+  .cover-title {
+    font-family: 'Cinzel', serif;
+    font-size: clamp(3rem, 10vw, 6rem);
+    font-weight: 400;
+    color: var(--parchment);
+    letter-spacing: 0.15em;
+    line-height: 1;
+    margin-bottom: 16px;
+  }
+
+  .cover-subtitle {
+    font-family: 'EB Garamond', serif;
+    font-size: clamp(1rem, 2.5vw, 1.4rem);
+    font-style: italic;
+    color: rgba(244,237,216,0.5);
+    margin-bottom: 40px;
+  }
+
+  .cover-rule {
+    width: 60px;
+    height: 1px;
+    background: var(--gold);
+    opacity: 0.4;
+    margin: 0 auto 32px;
+  }
+
+  .cover-author {
+    font-family: 'Cinzel', serif;
+    font-size: 1rem;
+    color: rgba(244,237,216,0.4);
+    letter-spacing: 0.2em;
+  }
+
+  .cover-location {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: rgba(200,168,74,0.3);
+    margin-top: 8px;
+  }
+
+  .page {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 60px 8vw;
+  }
+
+  .section {
+    margin-bottom: 64px;
+  }
+
+  .section-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--lake);
+    margin-bottom: 16px;
+    display: block;
+  }
+
+  .section-title {
+    font-family: 'Cinzel', serif;
+    font-size: 1.6rem;
+    font-weight: 400;
+    color: var(--deep);
+    letter-spacing: 0.06em;
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid rgba(13,36,51,0.1);
+  }
+
+  .prose p {
+    margin-bottom: 20px;
+    line-height: 1.95;
+    color: var(--ink);
+  }
+
+  .key-line {
+    background: var(--aged);
+    border-left: 3px solid var(--gold);
+    padding: 20px 28px;
+    margin: 32px 0;
+    font-style: italic;
+    font-size: 1.05rem;
+    color: var(--ocean);
+    line-height: 1.75;
+  }
+
+  .chapter-block {
+    background: white;
+    border: 1px solid rgba(13,36,51,0.08);
+    border-left: 4px solid var(--lake);
+    padding: 24px 28px;
+    margin-bottom: 20px;
+  }
+
+  .chapter-block.philosophy {
+    border-left-color: var(--gold);
+  }
+
+  .chapter-block.personal {
+    border-left-color: var(--coral);
+  }
+
+  .chapter-block.technique {
+    border-left-color: var(--verdigris);
+  }
+
+  .chapter-number {
+    font-family: 'DM Mono', monospace;
+    font-size: 8px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 8px;
+    display: block;
+  }
+
+  .chapter-title {
+    font-family: 'Cinzel', serif;
+    font-size: 1.1rem;
+    font-weight: 400;
+    color: var(--deep);
+    letter-spacing: 0.04em;
+    margin-bottom: 10px;
+    line-height: 1.3;
+  }
+
+  .chapter-subtitle {
+    font-size: 0.9rem;
+    font-style: italic;
+    color: var(--muted);
+    margin-bottom: 12px;
+  }
+
+  .chapter-body {
+    font-size: 0.92rem;
+    color: #2a3a48;
+    line-height: 1.8;
+  }
+
+  .chapter-thread {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 12px;
+  }
+
+  .thread-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 7px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 2px 8px;
+    border-radius: 2px;
+  }
+
+  .tag-technique { background: rgba(74,138,106,0.1); color: var(--verdigris); }
+  .tag-philosophy { background: rgba(200,168,74,0.1); color: #8a6a1e; }
+  .tag-personal { background: rgba(196,96,58,0.1); color: var(--coral); }
+  .tag-shanty { background: rgba(46,127,168,0.1); color: var(--lake); }
+
+  .three-threads {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin: 32px 0;
+  }
+
+  .thread-box {
+    padding: 20px;
+    text-align: center;
+    border: 1px solid rgba(13,36,51,0.08);
+  }
+
+  .thread-box.tech { border-top: 3px solid var(--verdigris); }
+  .thread-box.phil { border-top: 3px solid var(--gold); }
+  .thread-box.pers { border-top: 3px solid var(--coral); }
+
+  .thread-name {
+    font-family: 'Cinzel', serif;
+    font-size: 0.85rem;
+    color: var(--deep);
+    letter-spacing: 0.06em;
+    margin-bottom: 8px;
+  }
+
+  .thread-desc {
+    font-size: 0.82rem;
+    color: var(--muted);
+    line-height: 1.6;
+    font-style: italic;
+  }
+
+  .divider {
+    text-align: center;
+    color: var(--gold);
+    opacity: 0.4;
+    margin: 48px 0;
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.4em;
+  }
+
+  .manifesto {
+    background: var(--deep);
+    padding: 48px;
+    text-align: center;
+    margin: 48px 0;
+  }
+
+  .manifesto p {
+    font-family: 'EB Garamond', serif;
+    font-size: 1.15rem;
+    font-style: italic;
+    color: var(--parchment);
+    line-height: 2.1;
+    letter-spacing: 0.02em;
+  }
+
+  .manifesto cite {
+    display: block;
+    margin-top: 20px;
+    font-family: 'DM Mono', monospace;
+    font-size: 8px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(244,237,216,0.3);
+    font-style: normal;
+  }
+
+  .arc-flow {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    margin: 32px 0;
+    flex-wrap: wrap;
+  }
+
+  .arc-step {
+    flex: 1;
+    min-width: 120px;
+    background: white;
+    border: 1px solid rgba(13,36,51,0.08);
+    padding: 16px 12px;
+    text-align: center;
+    position: relative;
+  }
+
+  .arc-step::after {
+    content: '→';
+    position: absolute;
+    right: -12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--gold);
+    font-size: 1rem;
+    z-index: 1;
+  }
+
+  .arc-step:last-child::after { display: none; }
+
+  .arc-step-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 7px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 6px;
+  }
+
+  .arc-step-name {
+    font-family: 'Cinzel', serif;
+    font-size: 0.82rem;
+    color: var(--deep);
+    letter-spacing: 0.04em;
+    line-height: 1.3;
+  }
+
+  footer {
+    background: var(--deep);
+    padding: 32px 8vw;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 60px;
+  }
+
+  .footer-title {
+    font-family: 'Cinzel', serif;
+    font-size: 0.85rem;
+    color: rgba(244,237,216,0.3);
+    letter-spacing: 0.1em;
+  }
+
+  .footer-meta {
+    font-family: 'DM Mono', monospace;
+    font-size: 8px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(244,237,216,0.15);
+    text-align: right;
+    line-height: 2;
+  }
+
+  @media (max-width: 600px) {
+    .three-threads { grid-template-columns: 1fr; }
+    .arc-flow { flex-direction: column; }
+    .arc-step::after { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<section class="cover">
+  <div class="cover-inner">
+    <div class="cover-label">Book Three of the Wildlife Trilogy</div>
+    <h1 class="cover-title">Paramanta</h1>
+    <p class="cover-subtitle">The Art of Glide</p>
+    <div class="cover-rule"></div>
+    <div class="cover-author">Gordon Keay</div>
+    <div class="cover-location">Genthod · Lac Léman · 2026</div>
+  </div>
+</section>
+
+<div class="page">
+
+  <!-- SYNOPSIS -->
+  <div class="section">
+    <span class="section-label">The Book</span>
+    <h2 class="section-title">Synopsis</h2>
+
+    <div class="prose">
+      <p>Paramanta is the third book of the Wildlife Trilogy — and the most defiant. Where Wildlife excavates the wound and Archeus translates it into myth, Paramanta is the practice that emerges from both. It is a moving meditation on the art of glide. It is the answer the body found when the mind had run out of answers.</p>
+
+      <p>The word Paramanta holds the whole philosophy inside it. Paracelsus — the 500 year old Swiss alchemist who walked out into nature because nature was the only book worth reading. Paramahansa — the supreme swan, the highest state of consciousness, the soul that moves through the world without being disturbed by it. And the Manta Ray — the master of glide, the teacher, the creature that has solved the problem of effortless movement through a resistant medium.</p>
+
+      <p>The book is built around one central question that the author asks himself every morning when he carries his foil down to the dock on Lac Léman: what does it mean to move through the world without resistance? Not the physical question only — though the physics are real and the technique is taught honestly and in full. The deeper question. What does it mean to live without the armour? To inhabit the body with elegance and power. To stop fighting what you are and start becoming it completely.</p>
+
+      <p>Paramanta is part technique manual, part philosophy, part memoir, part sea shanty. It moves between the dock and the interior life, between the practical and the mythic, between the forty four year old man who failed a thousand times before he flew and the eight year old boy running through mustard fields in Lincolnshire with a dog called Scamper who was always already searching for the glide without knowing its name.</p>
+
+      <p>The problem is the solution. That's the book's central teaching. And the proof is a life fully and honestly lived — from Grimsby to Geneva, from the worm in Fiji to the bioluminescence in the deep, from the dock start to the breach — arriving finally at seventy five centimetres above the water, travelling at twenty five kilometres an hour, in a state of effortless grace.</p>
+
+      <p>This is not a book about pump foiling. It is a book about what happens when a human being finally stops fighting their own nature and learns to glide.</p>
+    </div>
+
+    <div class="key-line">
+      "On cherche le glisse. We search for the glide.<br>
+      This is not a destination. It is a practice.<br>
+      The problem is the solution."
+    </div>
+  </div>
+
+  <div class="divider">· · ·</div>
+
+  <!-- THREE THREADS -->
+  <div class="section">
+    <span class="section-label">The Structure</span>
+    <h2 class="section-title">Three Threads, One Voice</h2>
+
+    <div class="prose">
+      <p>Every chapter of Paramanta weaves three threads simultaneously. They are never separate. The technique always opens into philosophy. The philosophy always grounds in the personal. The personal always returns to the water.</p>
+    </div>
+
+    <div class="three-threads">
+      <div class="thread-box tech">
+        <div class="thread-name">The Technique</div>
+        <div class="thread-desc">How to pump foil. Honestly, physically, without mystification. The dock start. The jump. The landing. The pump. The gaze. The thousand falls. Written for the body not the mind.</div>
+      </div>
+      <div class="thread-box phil">
+        <div class="thread-name">The Philosophy</div>
+        <div class="thread-desc">What the practice teaches beyond the practice. Paracelsus. The nudibranch lens. Grit to pearl. The stone effect. The drum. The art of glide as a way of inhabiting a life.</div>
+      </div>
+      <div class="thread-box pers">
+        <div class="thread-name">The Personal</div>
+        <div class="thread-desc">The life that brought him to the dock. The illness. The wife's cancer. The body breaking down. The post-exertion malaise. The man who needed the water to teach him what no person could.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider">· · ·</div>
+
+  <!-- NARRATIVE ARC -->
+  <div class="section">
+    <span class="section-label">The Arc</span>
+    <h2 class="section-title">From Dock to Breach</h2>
+
+    <div class="prose">
+      <p>The book follows a single arc — from the first terrifying moment at the dock to the breach. Not a linear progression of skill but a spiral. Each attempt reveals something new. Each fall teaches something the previous fall couldn't. The arc is outward and inward simultaneously.</p>
+    </div>
+
+    <div class="arc-flow">
+      <div class="arc-step">
+        <div class="arc-step-label">Before</div>
+        <div class="arc-step-name">The Manta Ray Out of Water</div>
+      </div>
+      <div class="arc-step">
+        <div class="arc-step-label">Beginning</div>
+        <div class="arc-step-name">The Dock Start</div>
+      </div>
+      <div class="arc-step">
+        <div class="arc-step-label">Middle</div>
+        <div class="arc-step-name">A Thousand Falls</div>
+      </div>
+      <div class="arc-step">
+        <div class="arc-step-label">Turning</div>
+        <div class="arc-step-name">The First Glide</div>
+      </div>
+      <div class="arc-step">
+        <div class="arc-step-label">End</div>
+        <div class="arc-step-name">The Breach</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider">· · ·</div>
+
+  <!-- CHAPTER SKELETON -->
+  <div class="section">
+    <span class="section-label">The Chapters</span>
+    <h2 class="section-title">Skeleton Outline</h2>
+
+    <!-- Foreword -->
+    <div class="chapter-block philosophy">
+      <span class="chapter-number">Foreword</span>
+      <div class="chapter-title">On cherche le glisse</div>
+      <div class="chapter-subtitle">What this book is and isn't</div>
+      <div class="chapter-body">Not a how-to manual. Not a memoir. Something rarer — a practice described so deeply it becomes philosophy. Who this book is for. The sixteen year old who needed it. The man on the dock who is still failing. The invitation to search for the glide in whatever medium your life offers.</div>
+      <div class="chapter-thread">
+        <span class="thread-tag tag-philosophy">Philosophy</span>
+        <span class="thread-tag tag-personal">Personal</span>
+      </div>
+    </div>
+
+    <!-- Chapter 1 -->
+    <div class="chapter-block technique">
+      <span class="chapter-number">Chapter One</span>
+      <div class="chapter-title">The Manta Ray Out of Water</div>
+      <div class="chapter-subtitle">The equipment — and what it teaches before you reach the water</div>
+      <div class="chapter-body">The foil that makes no sense on land. The assembly ritual. The carrying. The protecting of the leading edge. The morning the equipment arrived — the long looking before touching. The manta ray waiting for its element. You are not yet the manta ray. But you will be.</div>
+      <div class="chapter-thread">
+        <span class="thread-tag tag-technique">Technique</span>
+        <span class="thread-tag tag-philosophy">Philosophy</span>
+        <span class="thread-tag tag-personal">Personal</span>
+      </div>
+    </div>
+
+    <!-- Chapter 2 -->
+    <div class="chapter-block personal">
+      <span class="chapter-number">Chapter Two</span>
+      <div class="chapter-title">Why I Came to the Dock</div>
+      <div class="chapter-subtitle">The context — illness, searching, the need that brought him to the water</div>
+      <div class="chapter-body">The body breaking down. Post-exertion malaise. The wife's cancer. The 70 square metres. The man who had been giving service from an empty tank for too long. The search for the glide that predates the foil — Stoke, Fiji, the reef, the bread, the meditation cushion. The dock as the latest answer to the oldest question.</div>
+      <div class="chapter-thread">
+        <span class="thread-tag tag-personal">Personal</span>
+        <span class="thread-tag tag-philosophy">Philosophy</span>
+      </div>
+    </div>
+
+    <!-- Chapter 3 -->
+    <div class="chapter-block technique">
+      <span class="chapter-number">Chapter Three</span>
+      <div class="chapter-title">The Dock Start</div>
+      <div class="chapter-subtitle">The most important moment — and the most terrifying</div>
+      <div class="chapter-body">The physics of the dock start. The drop, the jump, the landing like a cat. The transfer of momentum. The body position. The gaze — you go where you look. The internal monologue of early failure. The talk with yourself that morning — you are not special, there is no shortcut, give yourself grace. And what happened straight after.</div>
+      <div class="chapter-thread">
+        <span class="thread-tag tag-technique">Technique</span>
+        <span class="thread-tag tag-personal">Personal</span>
+      </div>
+    </div>
+
+    <!-- Chapter 4 -->
+    <div class="chapter-block philosophy">
+      <span class="chapter-number">Chapter Four</span>
+      <div class="chapter-title">A Thousand Falls</div>
+      <div class="chapter-subtitle">On failure as the only curriculum</div>
+      <div class="chapter-body">Failure is not the obstacle to the glide. It is the path. The thousand falls as initiation. Building the resilient body and the resilient mind. Progress is not linear — life is in motion — the problem is the solution. What the body learns that the mind can't be told. Neural pathways, muscle memory, the autocorrect of a thousand repetitions. Grit to pearl.</div>
+      <div class="chapter-thread">
+        <span class="thread-tag tag-technique">Technique</span>
+        <span class="thread-tag tag-philosophy">Philosophy</span>
+        <span class="thread-tag tag-shanty">Shanty</span>
+      </div>
+    </div>
+
+    <!-- Chapter 5 -->
+    <div class="chapter-block technique">
+      <span class="chapter-number">Chapter Five</span>
+      <div class="chapter-title">Reading the Water</div>
+      <div class="chapter-subtitle">The intelligence of the surface — and what lies beneath</div>
+      <div class="chapter-body">The lake as teacher. What the water's surface tells you before you enter it. Wind patterns, current lines, the quality of light. The grebe that reads water with complete attention. The nudibranch lens applied to the lake. Paying attention as the fundamental practice. Everything the water offers if you slow down enough to receive it.</div>
+      <div class="chapter-thread">
+        <span class="thread-tag tag-technique">Technique</span>
+        <span class="thread-tag tag-philosophy">Philosophy</span>
+      </div>
+    </div>
+
+    <!-- Chapter 6 -->
+    <div class="chapter-block philosophy">
+      <span class="chapter-number">Chapter Six</span>
+      <div class="chapter-title">The Body as Instrument</div>
+      <div class="chapter-subtitle">Biomimicry from the inside out</div>
+      <div class="chapter-body">The foil teaches what the body already knows. Foot position, weight distribution, the loose spine, the soft knees. The difference between forcing and allowing. Fascial intelligence. The body as the most sophisticated foil ever made. Biomimicry is not just copying shapes — it is learning to move like nature moves. Effortless grace in motion. This is Paramanta.</div>
+      <div class="chapter-thread">
+        <span class="thread-tag tag-technique">Technique</span>
+        <span class="thread-tag tag-philosophy">Philosophy</span>
+        <span class="thread-tag tag-personal">Personal</span>
+      </div>
+    </div>
+
+    <!-- Chapter 7 -->
+    <div class="chapter-block personal">
+      <span class="chapter-number">Chapter Seven</span>
+      <div class="chapter-title">The Leading Edge</div>
+      <div class="chapter-subtitle">On damage, repair and what the scars teach</div>
+      <div class="chapter-body">The most vulnerable surface. The place where magic happens. The chip that changes everything. Foil repair as philosophical practice — marine epoxy, carbon powder, patience. An unrepaired foil is not a tragedy, it is a project. The bent nib. The leading edge of the self damaged and repaired and stronger at the break. Protect the leading edge.</div>
+      <div class="chapter-thread">
+        <span class="thread-tag tag-technique">Technique</span>
+        <span class="thread-tag tag-philosophy">Philosophy</span>
+        <span class="thread-tag tag-personal">Personal</span>
+      </div>
+    </div>
+
+    <!-- Chapter 8 -->
+    <div class="chapter-block philosophy">
+      <span class="chapter-number">Chapter Eight</span>
+      <div class="chapter-title">The Drum</div>
+      <div class="chapter-subtitle">On rhythm, heartbeat and perpetual motion</div>
+      <div class="chapter-body">The pump foil runs on rhythm. Two beats. Load and release. The heartbeat as drum. Without perpetual motion the light goes out. Martin Shaw's blue Tibetan tent. The Balinese gamelan. The shanty sung at the dock. The discovery in the underworld — I had to keep dancing. Dancing in rhythm keeps the light alive. This is body logic. This is Paramanta.</div>
+      <div class="chapter-thread">
+        <span class="thread-tag tag-technique">Technique</span>
+        <span class="thread-tag tag-philosophy">Philosophy</span>
+        <span class="thread-tag tag-shanty">Shanty</span>
+      </div>
+    </div>
+
+    <!-- Chapter 9 -->
+    <div class="chapter-block technique">
+      <span class="chapter-number">Chapter Nine</span>
+      <div class="chapter-title">The Gaze</div>
+      <div class="chapter-subtitle">You go where you look</div>
+      <div class="chapter-body">The most underestimated teaching of the foil. The gaze determines everything — direction, balance, intention. Look down and go down. Lift the head and open to the world in front. The metaphysics of attention. The nudibranch lens in motion. What you give your full attention to you become. Where you look is where you go. Applied to the water and to the life.</div>
+      <div class="chapter-thread">
+        <span class="thread-tag tag-technique">Technique</span>
+        <span class="thread-tag tag-philosophy">Philosophy</span>
+      </div>
+    </div>
+
+    <!-- Chapter 10 -->
+    <div class="chapter-block personal">
+      <span class="chapter-number">Chapter Ten</span>
+      <div class="chapter-title">The Community of the Dock</div>
+      <div class="chapter-subtitle">On learning together — and what no solo practice can teach</div>
+      <div class="chapter-body">The people who gather at the water. What they teach each other without formal instruction. The intergenerational transmission of knowledge. The joy of watching someone find their first glide. The ethics of the dock — shared space, mutual encouragement, the particular generosity of a community built around difficulty. The boathouse as the natural next step. The Archeus Planare Foundation as the dream made real.</div>
+      <div class="chapter-thread">
+        <span class="thread-tag tag-personal">Personal</span>
+        <span class="thread-tag tag-philosophy">Philosophy</span>
+      </div>
+    </div>
+
+    <!-- Chapter 11 -->
+    <div class="chapter-block philosophy">
+      <span class="chapter-number">Chapter Eleven</span>
+      <div class="chapter-title">Paracelsus at the Dock</div>
+      <div class="chapter-subtitle">The alchemist who was always here</div>
+      <div class="chapter-body">Paracelsus walked out into the Swiss landscape five hundred years ago and said — nature is the only book worth reading. He called the body's inner intelligence the Archeus — the architect within. Solve et coagula. The base matter becoming precious. The foil as alchemical instrument. The lake as laboratory. The grit becoming pearl. The dose makes the poison. The problem is the solution.</div>
+      <div class="chapter-thread">
+        <span class="thread-tag tag-philosophy">Philosophy</span>
+        <span class="thread-tag tag-personal">Personal</span>
+      </div>
+    </div>
+
+    <!-- Chapter 12 -->
+    <div class="chapter-block personal">
+      <span class="chapter-number">Chapter Twelve</span>
+      <div class="chapter-title">The Inner Revolution</div>
+      <div class="chapter-subtitle">Pump foiling as embodiment practice — for the armoured self</div>
+      <div class="chapter-body">The foil demands exactly the qualities suppressed by the armoured self — gentleness, receptivity, presence, playfulness, trust. The man who spent forty years making himself small discovers that the water rewards expansion. The practice as the antidote to the wound. From effeminate to effervescent. From the clipped tongue to the full voice. Gordana on the water. The body finally inhabited without shame.</div>
+      <div class="chapter-thread">
+        <span class="thread-tag tag-personal">Personal</span>
+        <span class="thread-tag tag-philosophy">Philosophy</span>
+      </div>
+    </div>
+
+    <!-- Chapter 13 -->
+    <div class="chapter-block technique">
+      <span class="chapter-number">Chapter Thirteen</span>
+      <div class="chapter-title">The Minute Mark</div>
+      <div class="chapter-subtitle">Progress, patience and the moment everything changes</div>
+      <div class="chapter-body">Exactly two months after the first session — the minute mark. What it took to get there. How progress actually happens — not in a straight line but in sudden leaps after long plateaus. The invisible work of the body. The moment dynamic stability becomes instinct. What is possible after the minute mark that wasn't before. The glide as a state of being rather than an achievement.</div>
+      <div class="chapter-thread">
+        <span class="thread-tag tag-technique">Technique</span>
+        <span class="thread-tag tag-personal">Personal</span>
+      </div>
+    </div>
+
+    <!-- Chapter 14 -->
+    <div class="chapter-block philosophy">
+      <span class="chapter-number">Chapter Fourteen</span>
+      <div class="chapter-title">The Stone Effect</div>
+      <div class="chapter-subtitle">On intentional ripples and what the practice sends out into the world</div>
+      <div class="chapter-body">Not the butterfly effect — too random. The stone effect. Visible, intentional, traceable. The choice made in the here and now to give yourself to something larger than yourself. The pump foil community on Lac Léman as stone in still water. The foundation as the next ripple. The books as the next. The letter to Martin Shaw. The questions sent to the parents. Concentric circles ever expanding.</div>
+      <div class="chapter-thread">
+        <span class="thread-tag tag-philosophy">Philosophy</span>
+        <span class="thread-tag tag-personal">Personal</span>
+        <span class="thread-tag tag-shanty">Shanty</span>
+      </div>
+    </div>
+
+    <!-- Chapter 15 -->
+    <div class="chapter-block personal">
+      <span class="chapter-number">Chapter Fifteen — Final</span>
+      <div class="chapter-title">The Breach</div>
+      <div class="chapter-subtitle">Seventy five centimetres above the water</div>
+      <div class="chapter-body">The moment the underworld teaching arrives in the body. Dancing in the bioluminescence. The light growing brighter above. Hitting the surface with force. Soaring out from the deep into the sky. Perfectly poised above the water below the sky at seventy five centimetres travelling at twenty five kilometres an hour. The circuit closing. The search completed — not as destination but as practice understood. I wish you could have been there to see it. On cherche le glisse.</div>
+      <div class="chapter-thread">
+        <span class="thread-tag tag-personal">Personal</span>
+        <span class="thread-tag tag-philosophy">Philosophy</span>
+        <span class="thread-tag tag-shanty">Shanty</span>
+      </div>
+    </div>
+
+    <!-- Shanty -->
+    <div class="chapter-block">
+      <span class="chapter-number">Woven Throughout</span>
+      <div class="chapter-title">A Thousand Falls — The Shanty</div>
+      <div class="chapter-subtitle">The book's sung thread</div>
+      <div class="chapter-body">The sea shanty appears at the end of each section — the defiant rising song of the dock, the thousand falls, the getting up. A call and response structure. The caller's verse building from Gordon's own words. The chorus shifting from I to we as the book progresses. The final chorus sung by all. Heave and fall and rise again. A thousand falls won't break us. On cherche le glisse. The water's here to make us.</div>
+      <div class="chapter-thread">
+        <span class="thread-tag tag-shanty">Shanty</span>
+        <span class="thread-tag tag-philosophy">Philosophy</span>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="divider">· · ·</div>
+
+  <!-- MANIFESTO -->
+  <div class="manifesto">
+    <p>
+      I am becoming proboscis with bonobo tendencies<br>
+      with manta soul and nudi eyes.<br>
+      I breathe from the outside and grow from the inside.<br>
+      I carry no shame.<br><br>
+      I am Archeus and I speak for nature and the dispossessed.<br><br>
+      <em>The problem is the solution.<br>
+      From effeminate to effervescent.<br>
+      On cherche le glisse.</em>
+    </p>
+    <cite>Gordon Keay · Genthod · Lac Léman · 2026</cite>
+  </div>
+
+  <div class="divider">· · ·</div>
+
+  <!-- COMPARABLE TITLES -->
+  <div class="section">
+    <span class="section-label">Context</span>
+    <h2 class="section-title">Where This Book Lives</h2>
+    <div class="prose">
+      <p>Paramanta sits in the tradition of books that use a physical practice as a philosophical lens. Eugen Herrigel's Zen in the Art of Archery. Robert Pirsig's Zen and the Art of Motorcycle Maintenance. Norman Maclean's A River Runs Through It. Books where the activity is never really about the activity.</p>
+      <p>It also draws from the nature writing tradition of Robert Macfarlane and the mythic storytelling of Martin Shaw — grounded in landscape, alive to the symbolic layer, unafraid of the deep.</p>
+      <p>But it is finally its own thing. A Grimsby boy who ended up on an Alpine lake and found in the art of glide the philosophy his life had been building toward since he was eight years old with a white jack russell called Scamper and a yellow BMX with blue wheels and mustard fields stretching out to the horizon.</p>
+      <p>It is the book he wishes he had read at eighteen.</p>
+      <p>Which means it is exactly the book the world needs now.</p>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <div class="footer-title">Paramanta — The Art of Glide</div>
+  <div class="footer-meta">
+    Synopsis & Skeleton Outline · Draft 1<br>
+    Archeus Planare Foundation · 2026
+  </div>
+</footer>
+
+</body>
+</html>
